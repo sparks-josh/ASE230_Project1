@@ -10,8 +10,6 @@ if ($conn->connect_error) {
     exit;
 }
 
-// Retrieved from PowerPoint slide access mysql using php simple_php_server_with_mysql
-$method = $_SERVER['REQUEST_METHOD'];
 $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $path = trim($path, '/');
 $segments = explode('/', $path);
@@ -28,7 +26,6 @@ switch ($method) {
             add_issue_comment($conn, $id);
         } else {
             create_issue($conn);
-            // This is POST /issues → create new issue
         }
         // create issue and add comment need to be secure api
         break;
@@ -157,5 +154,9 @@ function add_issue_comment($conn, $id) {
     }
     $stmt->close(); 
 }
-// Retrieved from PowerPoint rest api build rest api server with php and crud_operatoin and put and post reuqests
+// References:
+// Simple_PHP_Server_with_MYSQL.md, page number 9
+// Building a REST API Server with PHP.md, page numbers 13, 14, 15, 19, 31, 32, 33, 36
+// CRUD_operation.md, page numbers 1, 3, 5, 6, 8, 
+// PUT and POST Requests.md, page numbers 32, 34, 35, 36, 38, 39
 ?>
