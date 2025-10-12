@@ -1,4 +1,9 @@
 <?php
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "jira_lite";
+
 $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
@@ -102,9 +107,12 @@ function create_issue($conn) {
 }
 
 function update_issue($conn, $id) {
-    $new_name = $_PUT['name'] ?? '';
-    $new_board = $_PUT['board'] ?? '';
-    $new_status = $_PUT['status'] ?? '';
+    $raw_data = file_get_contents('php://input');
+    $json_data = json_decode($raw_data, true);
+
+    $new_name = $json_data['name'] ?? '';
+    $new_board = $json_data['board'] ?? '';
+    $new_status = $json_data['status'] ?? '';
     
     $sql = "UPDATE issues SET name = ?, board = ?, status = ? WHERE id = ?";
     $stmt = $conn->prepare($sql);
@@ -119,7 +127,9 @@ function update_issue($conn, $id) {
 }
 
 function update_issue_status($conn, $id) {
-    $new_status = $_PATCH['status'] ?? '';
+    $raw_data = file_get_contents('php://input');
+    $json_data = json_decode($raw_data, true);
+    $new_status = $json_data['status'] ?? '';
     
     $sql = "UPDATE issues SET status = ? WHERE id = ?";
     $stmt = $conn->prepare($sql);
@@ -147,5 +157,5 @@ function add_issue_comment($conn, $id) {
     }
     $stmt->close(); 
 }
-// Retrieved from PowerPoint rest api build rest api server with php and crud_operatoin
+// Retrieved from PowerPoint rest api build rest api server with php and crud_operatoin and put and post reuqests
 ?>
