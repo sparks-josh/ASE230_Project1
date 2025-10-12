@@ -1,4 +1,10 @@
 <?php
+$method = $_SERVER['REQUEST_METHOD'];
+$path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+$path = trim($path, '/');
+$segments = explode('/', $path);
+$resource = $segments[0] ?? ''; 
+$id = $segments[1] ?? null; 
 switch ($method) {
     case 'GET':
         if ($id) { get_user($id); } 
