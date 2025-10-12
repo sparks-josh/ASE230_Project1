@@ -96,7 +96,7 @@ function create_issue($conn) {
 
     $sql = "INSERT INTO issues (name, board_id, status) VALUES (?, ?, ?)";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("sss", $name, $board_id, $status);
+    $stmt->bind_param("sis", $name, $board_id, $status);
 
     if ($stmt->execute()) {
         echo "Issue '$name' added successfully<br>";
@@ -116,7 +116,7 @@ function update_issue($conn, $id) {
     
     $sql = "UPDATE issues SET name = ?, board_id = ?, status = ? WHERE id = ?";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("sssi", $new_name, $new_board_id, $new_status, $id);
+    $stmt->bind_param("sisi", $new_name, $new_board_id, $new_status, $id);
 
     if ($stmt->execute()) {
         echo "Issue with ID $id updated successfully<br>";
