@@ -10,11 +10,48 @@ if ($conn->connect_error) {
     exit;
 }
 
+function getBearerToken() {
+    $headers = getallheaders();
+    
+    if (isset($headers['Authorization'])) {
+        if (preg_match('/Bearer\s+(.*)$/i', $headers['Authorization'], $matches)) {
+            return trim($matches[1]);
+        }
+    }
+    return null;
+}
+
+function isValidToken($token) {
+    $validTokens = [
+        'ase230' => 'ase230',
+    ];
+    return isset($validTokens[$token]) ? $validTokens[$token] : false;
+}
+
+function requireAuth() {
+    $token = getBearerToken();
+    if (!$token) {
+           http_response_code(401);
+           echo json_encode(['error' => 'Valid bearer token required']);
+           exit;
+        }
+    
+    $user = isValidToken($token);
+    if (!$user) {
+           http_response_code(401);
+           echo json_encode(['error' => 'Valid bearer token required']);
+           exit;
+        }
+    return $user;
+}
+
 $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $path = trim($path, '/');
 $segments = explode('/', $path);
 $resource = $segments[0] ?? ''; 
 $id = $segments[1] ?? null; 
+
+$method = $_SERVER['REQUEST_METHOD'];
 
 switch ($method) {
     case 'GET':
@@ -23,31 +60,35 @@ switch ($method) {
         break;
     case 'POST':
         if ($id && isset($segments[2]) && $segments[2] === 'comments') {
+            requireAuth();
             add_issue_comment($conn, $id);
         } else {
+            requireAuth();
             create_issue($conn);
         }
-        // create issue and add comment need to be secure api
         break;
     case 'PUT':
+        requireAuth();
         if ($id) { update_issue($conn, $id); } 
         else {
             http_response_code(400);
             echo json_encode(['error' => 'Issue ID required']);
+            exit;
         }
-        //update issue needs to be secure api
         break;
     case 'PATCH':
+        requireAuth();
         if ($id && isset($segments[2]) && $segments[2] === 'status') { update_issue_status($conn, $id); } 
         else {
            http_response_code(400);
            echo json_encode(['error' => 'Issue ID required']);
+           exit;
         }
         break;
-        // update issue status needs to be secure api
     default:
     http_response_code(405);
     echo json_encode(['error' => 'Method not allowed']);
+    exit;
 }
 
 function get_issue($conn, $id) {
@@ -154,9 +195,11 @@ function add_issue_comment($conn, $id) {
     }
     $stmt->close(); 
 }
+
 // References:
 // Simple_PHP_Server_with_MYSQL.md, page number 9
 // Building a REST API Server with PHP.md, page numbers 13, 14, 15, 19, 31, 32, 33, 36
 // CRUD_operation.md, page numbers 1, 3, 5, 6, 8, 
 // PUT and POST Requests.md, page numbers 32, 34, 35, 36, 38, 39
+// Bearer Token Authenticatoin.md, page numbers 11, 12, 14
 ?>
