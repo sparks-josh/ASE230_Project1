@@ -62,7 +62,7 @@ function get_issue($conn, $id) {
 
     if ($result->num_rows > 0) {
         $row = $result->fetch_assoc();
-        echo "Found issue: " . $row["id"] . " (Name: " . $row["name"] . ", Status: " . $row["status"] . ", Board: " . $row["board"] . ")<br>";
+        echo "Found issue: " . $row["id"] . " (Name: " . $row["name"] . ", Status: " . $row["status"] . ", Board: " . $row["board_id"] . ")<br>";
     } else {
         echo "No Issue found with ID $id<br>";
     }
@@ -79,7 +79,7 @@ function get_all_issues($conn) {
     echo "Found " . $result->num_rows . " issues:<br>";
     while($row = $result->fetch_assoc()) {
         echo "ID: " . $row["id"]. " - Name: " . $row["name"]. 
-          " - Board: " . $row["board"]. 
+          " - Board: " . $row["board_id"]. 
           " - Status: " . $row["status"]. "<br>";
     }
     } else {
@@ -91,12 +91,12 @@ function get_all_issues($conn) {
 
 function create_issue($conn) {
     $name = $_POST['name'] ?? '';
-    $board = $_POST['board'] ?? '';
+    $board_id = $_POST['board_id'] ?? '';
     $status = $_POST['status'] ?? '';
 
-    $sql = "INSERT INTO issues (name, board, status) VALUES (?, ?, ?)";
+    $sql = "INSERT INTO issues (name, board_id, status) VALUES (?, ?, ?)";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("sss", $name, $board, $status);
+    $stmt->bind_param("sss", $name, $board_id, $status);
 
     if ($stmt->execute()) {
         echo "Issue '$name' added successfully<br>";
@@ -111,12 +111,12 @@ function update_issue($conn, $id) {
     $json_data = json_decode($raw_data, true);
 
     $new_name = $json_data['name'] ?? '';
-    $new_board = $json_data['board'] ?? '';
+    $new_board_id = $json_data['board_id'] ?? '';
     $new_status = $json_data['status'] ?? '';
     
-    $sql = "UPDATE issues SET name = ?, board = ?, status = ? WHERE id = ?";
+    $sql = "UPDATE issues SET name = ?, board_id = ?, status = ? WHERE id = ?";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("sssi", $new_name, $new_board, $new_status, $id);
+    $stmt->bind_param("sssi", $new_name, $new_board_id, $new_status, $id);
 
     if ($stmt->execute()) {
         echo "Issue with ID $id updated successfully<br>";
