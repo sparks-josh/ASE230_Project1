@@ -1,23 +1,23 @@
 <?php
 
-//get_all_boards test:
-curl http://localhost:8000/boards.php
+//get_all_users test:
+curl http://localhost:8000/users.php
 
-//My output: Found 1 boards:<br>ID: 1 - Name: Test<br>%  
-
-
-
-
-//get_board test:
-curl http://localhost:8000/boards.php/1
-
-//My output: Found board: 1 (Name: Test) <br>%  
+//My output: Found 1 users:<br>ID: 2 - Name: Test<br>%
 
 
 
 
-//create_board test:
-curl -s -X POST -H "Content-Type: application/json" \ -d '{"name": "Test2","id": 1}' \ http://localhost:8000/boards.php
+//get_user test:
+curl http://localhost:8000/users.php/2
+
+//My output: Found user: 2 (Name: Test) <br>%   
+
+
+
+
+//create_user test:
+curl -s -X POST -H "Content-Type: application/json" \ -d '{"name": "Test2","id": 1}' \ http://localhost:8000/users.php
 
 //My output: joshsparks@MacBookAir API Code % 
 
