@@ -24,7 +24,7 @@ Total Points: 200
 - [20/20] Made cURL test code (should test all APIs, 2 points per 1 API).
   - List the file name: located in /code/cURL API Tests; boards_api_test.php, issues_api_tests.php, users_api_tests.php
 - [ /20] Made HTML/JavaScript test code (should test all APIs, 2 points per 1 API).
-  - List the file name: located in /code/HTML_JavaScript_Tests/api_tests.html;
+  - List the file name: located in /code/HTML_JavaScript_Tests/;boards_api_tests.html, issues_api_tests.html, users_api_tests.html
 
 ---
 
