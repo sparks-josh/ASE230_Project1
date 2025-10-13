@@ -12,797 +12,953 @@ style: |
   .column {
     flex: 1;
   }
+  .small-code pre {
+    font-size: 0.7em;
+  }
+  .small-code code {
+    font-size: 0.7em;
+  }
 ---
 
 <!-- _class: frontpage -->
 <!-- _paginate: skip -->
 
-# Bearer Token Authentication
+# Testing REST API Servers
+
+Building Confidence in Your Web Services
 
 ---
-
 <style scoped>
-li { font-size: 13pt !important; line-height: 1.2 !important;}
+li { font-size: 14pt !important; line-height: 1.2 !important;}
 </style>
 
-- [What is Bearer Token Authentication?](#what-is-bearer-token-authentication)
-  - [The Problem: API Authentication](#the-problem-api-authentication)
-- [What is a Bearer Token?](#what-is-a-bearer-token)
-  - [Simple Definition](#simple-definition)
-  - [How Bearer Tokens Work](#how-bearer-tokens-work)
-  - [Step-by-Step Process](#step-by-step-process)
-  - [The Flow](#the-flow)
-  - [Bearer vs Sessions vs Cookies](#bearer-vs-sessions-vs-cookies)
-- [Simple Example](#simple-example)
-  - [bearer\_auth.php](#bearer_authphp)
-  - [api.php - Protected API endpoint example](#apiphp---protected-api-endpoint-example)
-  - [Accessing api.php using cURL](#accessing-apiphp-using-curl)
-- [Example](#example)
-  - [client\_demo.html](#client_demohtml)
-  - [login.php](#loginphp)
-  - [protected\_api.php](#protected_apiphp)
-  - [index.php](#indexphp)
-  - [Token Management](#token-management)
-  - [Error Handling](#error-handling)
-- [Key Takeaways](#key-takeaways)
-  - [Bearer Token Authentication Enables](#bearer-token-authentication-enables)
-  - [Remember](#remember)
-  - [Where Bearer Tokens Are Used](#where-bearer-tokens-are-used)
+<!-- TOC -->
+- [Why and How to test REST APIs?](#why-and-how-to-test-rest-apis)
+  - [🤔 Why Test REST APIs?](#-why-test-rest-apis)
+  - [🔍 How - Two Types of API Tests](#-how---two-types-of-api-tests)
+  - [🛠️ Testing Tools: JavaScript vs CURL](#️-testing-tools-javascript-vs-curl)
+  - [📊 Our Student Management API](#-our-student-management-api)
+  - [Student Data Model](#student-data-model)
+- [Shell Programming](#shell-programming)
+  - [test\_get\_all.sh](#test_get_allsh)
+  - [make\_curl\_request](#make_curl_request)
+  - [🛠️ Our Complete Testing Suite](#️-our-complete-testing-suite)
+  - [🚀 Running the Tests](#-running-the-tests)
+  - [🧪 Error Testing Examples](#-error-testing-examples)
+  - [🔧 Advanced CURL Techniques](#-advanced-curl-techniques)
+- [🎯 What Makes a Good API Test?](#-what-makes-a-good-api-test)
+  - [Test Anatomy: The AAA Pattern](#test-anatomy-the-aaa-pattern)
+  - [📋 Testing Checklist](#-testing-checklist)
+  - [🚨 Common Testing Mistakes](#-common-testing-mistakes)
+  - [💻 CURL vs JavaScript: When to Use What?](#-curl-vs-javascript-when-to-use-what)
+  - [📚 Key Takeaways](#-key-takeaways)
+<!--/TOC -->
 
 ---
 
-## What is Bearer Token Authentication?
+🎯 Learning Objectives
 
-### The Problem: API Authentication
+By the end of this lesson, you will understand:
 
-🤔 **Question**: How do mobile apps and web APIs identify users?
-
-**Traditional web apps**: Use sessions and cookies
-**APIs and mobile apps**: Need something different!
-
-**Why sessions don't work for APIs:**
-
-- Mobile apps can't handle cookies easily
-- APIs are often stateless
-- Cross-domain requests are complex
+- **Why** we need to test REST APIs
+- **How** to test API endpoints using **JavaScript** and **CURL**
+- **What** makes a good API test
+- **When** to run different types of tests
 
 ---
 
-## What is a Bearer Token?
-
-### Simple Definition
-
-A **bearer token** is like a **digital ticket** 🎫
-
-- **Bearer** = "whoever holds this token"
-- **Token** = a string that proves identity
-- **No username/password needed** for each request
+## Why and How to test REST APIs?
 
 ---
 
-### How Bearer Tokens Work
-
-```txt
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxMjMsImV4cCI6MTYzMjQ4...
-                ▲                    ▲
-            Scheme              JWT Token
-```
-
-- **Bearer** is **how you send** the token, **JWT** is **what format** the token uses.
-- JWT is one of the most popular token formats that Bearer can use.
-  - Opaque tokens – random strings with no readable structure (e.g., h38djE8s9eD7w01kWqLs...).
-  - Custom formats – some systems may define their token formats.
-
----
-
-#### Real Example
-
-```txt
-Authorization: Bearer abc123xyz789
-```
-
-**Think of it like:**
-
-- Concert ticket: Show it → Get in
-- Bus pass: Flash it → Ride the bus
-- Bearer token: Send it → Access API
-
----
-
-### Step-by-Step Process
+### 🤔 Why Test REST APIs?
 
 <div class="columns">
   <div class="column">
+  
+#### **Reliability** 🛡️
 
-![w:300pt](img/bearer.png)
+- Ensure your API works as expected
+- Catch bugs before users do
+- Maintain service quality
+  
+#### **Documentation** 📚
 
+- Tests serve as living examples
+- Show how the API should be used
+- Prove API functionality
+  
   </div>
-
   <div class="column">
+  
+#### **Confidence** 💪
 
-### The Flow
+- Safe to make changes
+- Deploy with assurance
+- Reduce production issues
+  
+#### **Communication** 🗣️
 
-1. **Login once** → Get your token
-2. **Keep the token** safe
-3. **Send token** with every API request
-4. **Server checks** if token is valid
-
+- Clear expectations
+- Team understanding
+- Client integration
+  
+</div>
 </div>
 
 ---
 
-### Bearer vs Sessions vs Cookies
+### 🔍 How - Two Types of API Tests
 
-| Method       | How it works                | Best for             |
-|--------------|-----------------------------|----------------------|
-| **Cookies**  | Browser automatically sends | Traditional websites |
-| **Sessions** | Server stores user state    | Web applications     |
-| **Bearer**   | Client sends token manually | APIs, mobile apps    |
+#### 1. **Connection Tests** 🌐 "Is the server alive?"
 
----
+- Server responds to requests
+- Returns valid HTTP status codes
+- Basic connectivity verification
 
-#### Key Differences
+#### 2. **Functional Tests** ⚙️ "Does it work correctly?"
 
-**Sessions**: "Server remembers you"
-**Bearer**: "You prove who you are each time."
-**Bearer tokens are:**
-
-- ✅ Stateless (server doesn't store anything)
-- ✅ Perfect for APIs
-- ✅ Work with any client (mobile, web, etc.)
+- Data validation
+- Business logic verification
+- Expected behavior confirmation
 
 ---
 
-## Simple Example
+### 🛠️ Testing Tools: JavaScript vs CURL
 
-Files can be found in `code/7_Security/3_bearear`.
+<div class="columns">
+<div class="column">
 
-- bearer_auth.php
-- api.php
-  - accessing with curl
-  - accessing with JavaScript
+#### **JavaScript/Fetch** 🌐
+
+- Web-based testing
+- Visual interfaces
+- Great for beginners
+- Interactive learning
+
+</div>
+<div class="column">
+
+#### **CURL** 💻
+
+- Command-line tool
+- Universal availability
+- Scriptable automation
+- Professional standard
+
+</div>
+</div>
+
+**Both test the same API - different approaches!**
 
 ---
 
-### bearer_auth.php
+### 📊 Our Student Management API
 
-- bearer_auth.php is the Bearer Token Authentication Helper.
-- It has simple functions for handling bearer token authentication
+```http
+GET    /students      → Get all students
+GET    /students/1    → Get student by ID
+POST   /students      → Create new student
+PUT    /students/1    → Update student
+DELETE /students/1    → Delete student
+```
 
----
+### Student Data Model
 
-#### getBeareToken
-
-- Extract bearer token from Authorization header
-  - It uses regex pattern `preg_match('/Bearer\s+(.*)$/i'`
-
-```php
-function getBearerToken() {
-    $headers = getallheaders();
-    
-    // Check if Authorization header exists
-    if (isset($headers['Authorization'])) {
-        // Extract token from "Bearer TOKEN_HERE" format
-        if (preg_match('/Bearer\s+(.*)$/i', $headers['Authorization'], $matches)) {
-            return trim($matches[1]);
-        }
-    }
-    return null;
+```json
+{
+  "id": 1,
+  "name": "Alice Johnson",
+  "email": "alice@university.edu",
+  "major": "Computer Science",
+  "year": 3
 }
 ```
 
 ---
 
-#### isValidToken
+## Shell Programming
 
-- Simple token validation (for demo purposes)
-  - In real applications, check the database for expiration
-
-```php
-function isValidToken($token) {
-    // Demo tokens - in real app, check database
-    $validTokens = [
-        'abc123' => 'john_doe',
-        'xyz789' => 'jane_smith', 
-        'def456' => 'admin_user',
-        'student123' => 'student',
-        'teacher456' => 'teacher'
-    ];
-    return isset($validTokens[$token]) ? $validTokens[$token] : false;
-}
-```
+- On Linux and macOS, shell scripts are the most common choice for REST API testing.
+- On Windows, PowerShell is the modern equivalent, though many developers still prefer Bash scripts (via Git Bash or WSL) for cross-platform compatibility.
+- In this section, we focus mainly on shell scripts.
 
 ---
 
-#### generateSecureToken
+### test_get_all.sh
 
-- Generate a secure random token
-
-```php
-function generateSecureToken() {
-    return bin2hex(random_bytes(32)); // 64 character hex string
-}
-```
-
----
-
-#### requireAuth
-
-- Require authentication for an endpoint
-  - Call this at the start of protected endpoints
-
-```php
-function requireAuth() {
-    $token = getBearerToken();
-    if (!$token) {sendJsonError(401, 'Bearer token required'); }
-    
-    $user = isValidToken($token);
-    if (!$user) { sendJsonError(401, 'Invalid or expired token'); }
-    return $user;
-}
-function sendJsonError($statusCode, $message) {
-    http_response_code($statusCode);
-    header('Content-Type: application/json');
-    echo json_encode(['error' => $message]);
-    exit;
-}
-```
-
----
-
-### api.php - Protected API endpoint example
-
-```php
-<?php
-require_once 'bearer_auth.php';
-
-// Get the token from request
-$token = getBearerToken();
-if (!$token) {
-    http_response_code(401);
-    echo json_encode(['error' => 'Token required']);
-    exit;
-}
-// Validate token
-$user = isValidToken($token);
-if (!$user) {
-    http_response_code(401);
-    echo json_encode(['error' => 'Invalid token']);
-    exit;
-}
-// Success! Return protected data
-echo json_encode([
-    'message' => 'Welcome to protected API!',
-    'user' => $user,
-    'data' => ['item1', 'item2', 'item3']
-]);
-?>
-```
-
----
-
-### Accessing api.php using cURL
-
-- We can access the server via `api.php`.
-  - We have the bearer token "student123".
-- We can access the API server only with the bearer token.
+- A variable in a shell script is assigned with `=`, but notice that there is no space between the operator.
+- The variable is used with $ prepended.
 
 ```bash
-> curl http://localhost:8000/api.php
-{"error":"Token required"}
+API_BASE_URL="http://localhost:8000"
+VERBOSE=false
 
-> curl -X GET "http://localhost:8000/api.php" \
-     -H "Authorization: Bearer student123" \
-     -H "Content-Type: application/json"
-{"message":"Welcome to protected API!","user":"student","data":["item1","item2","item3"]}
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+MAGENTA='\033[0;35m'
+CYAN='\033[0;36m'
+NC='\033[0m' # No Color
+
+echo -e "${GREEN}✅ $test_name: $message${NC}"
 ```
 
 ---
 
-#### Accessing api.php using JavaScript
+#### Function
 
-```javascript
-// Store token (after login)
-const token = 'student123';
-
-// Make API call with token
-fetch('localhost:8000/api.php', {
-    method: 'GET',
-    headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
-    }
-})
-.then(response => response.json())
-.then(data => console.log(data));
-```
-
----
-
-## Example
-
----
-
-### client_demo.html
-
-#### Step 1: Login
-
-##### HTML
-
-- Inputs (username and password), and click the button to display a placeholder for the bearer
-
-```php
-<div class="container">
-    <h2 class="step">Login to Get Token</h2>
-    <div class="form-group">
-        <label for="username">Username:</label>
-        <input type="text" id="username" value="student" placeholder="Try: student, teacher, admin_user">
-    </div>
-    <div class="form-group">
-        <label for="password">Password:</label>
-        <input type="password" id="password" value="student123" placeholder="Password">
-    </div>
-    <button onclick="login()">Login</button>
-    <div id="loginResponse"></div>
-    <div id="tokenDisplay" class="token-display" style="display: none;">
-        <strong>Your Bearer Token:</strong>
-        <div id="tokenValue"></div>
-    </div>
-</div>
-```
-
----
-
-##### JavaScript
-
-- Getting the placeholder information in HTML
-
-```javascript
-async function login() {
-    const username = document.getElementById('username').value;
-    const password = document.getElementById('password').value;
-    const responseDiv = document.getElementById('loginResponse');
-    if (!username || !password) {
-        showError(responseDiv, 'Please enter both username and password');
-        return;
-    }
-```
-
----
-
-- It accesses `login.php` using the POST method with username and password.
-
-```javascript
-    try {
-        const response = await fetch('login.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ username, password })
-        });
-```
-
----
-
-- It waits for the response from the server and displays the returned information.
-
-```javascript
-        const data = await response.json();
-        if (response.ok) {
-            currentToken = data.token;
-            showSuccess(responseDiv, 'Login successful!');
-            
-            // Show token
-            document.getElementById('tokenDisplay').style.display = 'block';
-            document.getElementById('tokenValue').textContent = currentToken;
-            
-            // Enable API button
-            document.getElementById('apiButton').disabled = false;
-        } else {
-            showError(responseDiv, data.error || 'Login failed');
-        }
-    } catch (error) {
-        showError(responseDiv, 'Network error: ' + error.message);
-    }
-}
-```
-
----
-
-#### Step 2: Access Protected API using the Token
-
-##### HTML
-
-```php
-    <div class="container">
-        <h2 class="step">Access Protected API</h2>
-        <p>Once you have a token, use it to access protected resources.</p>
-        <button onclick="accessProtectedAPI()" id="apiButton" disabled>Access Protected API</button>
-        <div id="apiResponse"></div>
-    </div>
-```
-
----
-
-##### JavaScript
-
-- Access protected_api.php with bearer token
-
-```javascript
-async function accessProtectedAPI() {
-    const responseDiv = document.getElementById('apiResponse');
-    if (!currentToken) {
-        showError(responseDiv, 'Please login first to get a token');
-        return;
-    }
-    try {
-        const response = await fetch('protected_api.php', {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${currentToken}`,
-                'Content-Type': 'application/json'
-            }
-        });
-```
-
----
-
-- Get the information from the server and display it.
-
-```javascript
-        const data = await response.json();
-        if (response.ok) {
-            showResponse(responseDiv, JSON.stringify(data, null, 2));
-        } else {
-            showError(responseDiv, data.error || 'API request failed');
-        }
-    } catch (error) {
-        showError(responseDiv, 'Network error: ' + error.message);
-    }
-}
-```
-
----
-
-#### Step 3: Manual Token Test
-
-##### HTML
-
-```php
-    <div class="container">
-        <h2 class="step">Manual Token Test</h2>
-        <p>Try entering a token manually or test invalid tokens.</p>
-        <div class="form-group">
-            <label for="manualToken">Bearer Token:</label>
-            <input type="text" id="manualToken" placeholder="abc123, xyz789, or def456">
-        </div>
-        <button onclick="testManualToken()">Test Token</button>
-        <div id="manualResponse"></div>
-    </div>
-```
-
----
-
-##### JavaScript
-
-- Using the given token, we try to access the API.
-
-```javascript
-async function testManualToken() {
-    const token = document.getElementById('manualToken').value;
-    const responseDiv = document.getElementById('manualResponse');
-    if (!token) {
-        showError(responseDiv, 'Please enter a token');
-        return;
-    }
-    try {
-        const response = await fetch('protected_api.php', {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json'
-            }
-        });
-        const data = await response.json();
-        if (response.ok) { showResponse(responseDiv, JSON.stringify(data, null, 2)); } else {
-            showError(responseDiv, data.error || 'Token validation failed');
-        }
-    } catch (error) {
-        showError(responseDiv, 'Network error: ' + error.message);
-    }
-}
-```
-
----
-
-### login.php
-
-#### Step 1: Get JSON input
-
-```php
-$input = json_decode(file_get_contents('php://input'), true);
-```
-
-#### Step 2: Retrieve username and password
-
-```php
-if (!isset($input['username']) || !isset($input['password'])) {
-    sendJsonError(400, 'Username and password required');
-}
-$username = $input['username'];
-$password = $input['password'];
-```
-
----
-
-#### Step 3: Check the users' database
-
-```php
-$users = [ ... ] // DB in an array
-// Validate credentials
-if (!isset($users[$username]) || $users[$username] !== $password) {
-    sendJsonError(401, 'Invalid username or password');
-}
-```
-
----
-
-#### Step 4: Generate token, store in DB, and return JSON
-
-```php
-$demoTokens = [ ... ]
-$token = $demoTokens[$username];
-$demoToken[...] = $token;
-
-// Return success with token
-sendJsonSuccess([
-    'message' => 'Login successful',
-    'token' => $token,
-    'user' => $username,
-    'expires_in' => 3600 // 1 hour (demo value)
-]);
-```
-
----
-
-### protected_api.php
-
-#### Step 1: Get a bearer token to check authentication
-
-```php
-// Require authentication - this will exit if no valid token
-$user = requireAuth();
-```
-
----
-
-#### Step 2: Return protected data
-
-- We can add user-specific data
-
-```php
-$protectedData = [
-    'message' => 'Welcome to the protected API!',
-    'authenticated_user' => $user,
-    'data' => [
-        'secret_info' => 'This is confidential data',
-        'server_info' => 'PHP ' . phpversion()
-    ]
-];
-// Add user-specific data
-if ($user === 'admin_user') {
-    $protectedData['admin_data'] = [
-        'admin_tools' => ['user_management', 'system_logs']
-    ];
-}
-// Return the protected data
-sendJsonSuccess($protectedData);
-?>
-```
-
----
-
-### index.php
-
-- This script has all the test code for the interactive demo.
-
-#### test_curl.sh
-
-- We can download `test_curl.sh` from the index.php menu.
-
-```html
-<div class="demo-card">
-    <h3>💻 Command Line</h3>
-    <p>Test with cURL commands and see the raw HTTP requests and responses.</p>
-    <a href="test_curl.sh" download>Download Script →</a>
-</div>
-```
-
----
-
-#### Run test_curl.sh
+- Functions are defined as follows.
+- The arguments are assigned as $1, $2, and so on.
 
 ```bash
-> bash test_curl.sh
-bash test_curl.sh 
-🔐 Bearer Token Authentication Examples
-=======================================
-
-Step 1: Log in to get a bearer token
-======================================
-
-Log in with valid credentials:
-curl -X POST http://localhost:8000/login.php \
-     -H "Content-Type: application/json" \
-     -d '{"username":"student","password":"student123"}'
-
-Try this command:
-{"message":"Login successful","token":"student123","user":"student","expires_in":3600}
-
-Step 2: Use the token to access the protected API
-==============================================
-
-Access protected endpoint with valid token:
-curl -H "Authorization: Bearer student123" \
-     http://localhost:8000/protected_api.php
-
-Try this command:
-{"message":"Welcome to the protected API!","authenticated_user":"student",
-"timestamp":"2025-08-06 22:55:21",
-"data":{"secret_info":"This is confidential data",
-"user_permissions":["read","write"],
-"server_info":"PHP 8.4.11"},
-"student_data":{"enrolled_courses":["ASE230"],"grades":["A","B+","A-"],"next_assignment":"Bearer Token Project"}}
+print_result() {
+    local test_name= "$1"
+    local success= "$2"
+    local message= "$3"
+    local data= "$4"
 ```
 
 ---
 
-```txt
-Step 3: Test with an invalid token
-==================================
+#### If Statement
 
-Try with an invalid token:
-curl -H "Authorization: Bearer invalid_token" \
-     http://localhost:8000/protected_api.php
-
-This should return an error:
-{"error":"Invalid or expired token"}
-
-Step 4: Test without a token
-=============================
-
-Try without any token:
-curl http://localhost:8000/protected_api.php
-
-This should also return an error:
-{"error":"Bearer token required"}
-
-Summary:
-========
-✅ Valid token: Returns protected data
-❌ Invalid token: Returns 401 error
-❌ No token: Returns 401 error
-
-Valid tokens for testing:
-- student123 (user: student)
-- teacher456 (user: teacher)
-- abc123 (user: john_doe)
-- xyz789 (user: jane_smith)
-- def456 (user: admin_user)
-
-Other users you can log in with:
-- username: teacher, password: teacher456
-- username: admin_user, password: admin789
-- username: john_doe, password: password123
-- username: jane_smith, password: secret456
-```
-
----
-
-### Token Management
-
-#### Generating Secure Tokens
-
-- There are many ways to generate secure tokens.
+- If/else statement is used as follows.
+- The conditional expression is inside the `[[ ... ]];` block.
+- We can add the `else` block.
 
 ```php
-<?php
-function generateSecureToken() {
-    // Generate cryptographically secure random token
-    return bin2hex(random_bytes(32)); // 64 character hex string
+    if [[ "$success" == "true" ]]; then
+        echo -e "${GREEN}✅ $test_name: $message${NC}"
+    else
+        echo -e "${RED}❌ $test_name: $message${NC}"
+    fi
 }
-
-function createTokenForUser($userId) {
-    $token = generateSecureToken();
-    $expiry = time() + (60 * 60); // 1 hour from now
-    // Store in database
-    // INSERT INTO tokens (token, user_id, expires_at) VALUES (?, ?, ?)
-    return $token;
-}
-?>
-```
-
-#### Token Storage (Database)
-
-- We should use a DB to store tokens in a real-world situation.
-
-```sql
-CREATE TABLE tokens (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    token VARCHAR(128) UNIQUE NOT NULL,
-    user_id INT NOT NULL,
-    expires_at TIMESTAMP NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
 ```
 
 ---
 
-### Error Handling
+#### echo & function call
 
-#### Proper HTTP Status Codes
-
-401 for unauthorized and 403 for forbidden.
+- To print out the result, we use `echo`.
+- To call the shell function, we use the name of the function followed by matching arguments.
 
 ```php
-<?php
-function sendUnauthorized($message = 'Unauthorized') {
-    http_response_code(401);
-    header('Content-Type: application/json');
-    echo json_encode(['error' => $message]);
-    exit;
-}
-function sendForbidden($message = 'Forbidden') {
-    http_response_code(403);
-    header('Content-Type: application/json');
-    echo json_encode(['error' => $message]);
-    exit;
-}
-// Usage
-if (!$token) { sendUnauthorized('Bearer token required'); }
-if (!isValidToken($token)) { sendUnauthorized('Invalid or expired token');}
-?>
+    
+    if [[ "$VERBOSE" == "true" && -n "$data" ]]; then
+        echo -e "${CYAN}   Response: $data${NC}"
+    fi
+
+...
+
+print_result('name',' success', 'message', 'data');
 ```
 
 ---
 
-## Key Takeaways
+### make_curl_request
 
-### Bearer Token Authentication Enables
+- The curl command needs multiple arguments.
+- We can simplify it using a shell function.
 
-- 🔐 **Stateless authentication** for APIs
-- 📱 **Mobile app** authentication
-- 🌐 **Cross-domain** API access
-- ⚡ **Scalable** authentication systems
-
----
-
-### Remember
-
-1. **Bearer tokens** = digital tickets for API access
-2. **Always use HTTPS** for security
-3. **Tokens should expire** for safety
-4. **Perfect for APIs** and mobile apps
-5. **Simpler than sessions** for stateless applications
-
----
-
-### Where Bearer Tokens Are Used
-
-1. **Mobile Apps** 📱
-   - Instagram, Twitter, Facebook apps
-   - Banking applications
-
-2. **Single Page Applications** 💻
-   - React, Vue, Angular apps
-   - Modern web dashboards
+```php
+make_curl_request() {
+    local url= "$1"
+    local method= "$2"
+    local data= "$3"
+    local content_type=" application/json"
+    
+    if [[ -n "$data" ]]; then
+        curl -s -w "\n%{http_code}" -X "$method" \
+             -H "Content-Type: $content_type" \
+             -d "$data" \
+             "$url"
+    else
+        curl -s -w "\n%{http_code}" -X "$method" "$url"
+    fi
+}
+```
 
 ---
 
-3. **API Integrations** 🔗
-   - Payment processing (Stripe, PayPal)
-   - Cloud services (AWS, Google Cloud)
+- In this example, we call the `curl` command with various arguments.
+- Using the if statement, we separate the case when the `$data` is given or not.
+- This is the case when data is not given.
+  - `-s' silences progress and error messages.
+  - `-w "\n%{http_code}"` appends the HTTP status on a new line after the response body.
+  - `-X "$method``` specifies the HTTP method to use (GET, POST, etc).
 
-4. **Microservices** ⚙️
-   - Service-to-service communication
-   - Distributed applications
+---
+
+- We need "\n%{http_code}" option to use the HTTP status to check if the test is success or not.
+  - We get the HTTP status to get the last line (tail -n1).
+
+```php
+response=$(curl -s -w "%{http_code}" \
+    http://localhost:8000)
+http_code=$(echo "$response" | tail -n1)
+
+if [ "$http_code" = "200" ]; then
+    echo "✅ Server running!"
+else
+    echo "❌ Connection failed"
+fi
+```
+
+---
+
+#### Getting the JSON data except for the HTTP Code
+
+- We need to get the JSON data except for the last line.
+- However, this code does not work for FreeBSD-based UNIX systems (such as Mac).
+
+```bash
+local json_data=$(echo "$response" | head -n -1) 
+```
+
+- Instead, we should use this command to get the lines except for the last one (sed $d).
+
+```bash
+extract_json_data() {
+    local response= "$1"
+    echo "$response" | sed '$d'
+}
+local json_data=$(extract_json_data "$response")
+```
+
+---
+
+#### Get the HTTP code and JSON data
+
+- So, this is the pattern to get the HTTP code and JSON data from the REST API server to explain the idea in the examples.
+
+```bash
+http_code=$(echo "$response" | tail -n1)
+json_data=$(echo "$response" | head -n -1)
+if [ "$http_code" = "201" ]; then 
+```
+
+---
+
+#### Use the Grep command to extract information
+
+- `grep` searches for patterns in a stream or file — here, it's looking for the exact text `"success":true`
+  - The `-q` flag stands for quiet (or silent):
+  - It suppresses output — nothing is printed to the terminal.
+  - Instead, it uses the exit code to indicate if a match was found.
+
+```bash
+if echo "$response" | grep -q '"success":true'; then
+    echo "✅ Success field found"
+fi
+```
+
+---
+
+```json
+{
+  "id": 123,
+  "name": "Alice",
+  "success": true
+}
+```
+
+- We need to extract the `123` from this JSON string.
+- In this case, we can use grep.
+
+```bash
+student_id=$(echo "$json_data" | \
+    grep -o '"id":[0-9]*' | \
+    grep -o '[0-9]*')
+```
+
+- `grep -o '"id":0-9*" Searches for a pattern like`"id":123` and outputs that match using `-o'.
+- `grep -o' 0-9*" Extracts only the numeric part from the above string.
+
+---
+
+### 🛠️ Our Complete Testing Suite
+
+#### **Web Interface** (index.html)
+
+- Visual feedback with JavaScript
+- Interactive testing
+- Great for learning
+- Real-time results
+
+---
+
+#### **Command Line JavaScript** (test_runner.js)
+
+(Optioanl) Run this when you know `node.js` and how to run a `node.js` script.
+
+- Node.js automation
+- Detailed JSON validation
+- Programming examples
+
+---
+
+#### **CURL Scripts** (test_runner_curl.sh/.bat)
+
+- Universal tool
+- Shell scripting examples
+- Cross-platform support
+
+---
+
+### 🚀 Running the Tests
+
+#### **Step 1: Start API Server**
+
+```bash
+cd api
+php -S localhost:8000
+```
+
+#### **Step 2A: Web Interface**
+
+Open `api_tests/javascript/index.html` in browser (as a file)
+
+#### **Step 2B: JavaScript CLI**
+
+(Optional) Run this when you know how to use `node.js`.
+
+```bash
+node api_tests/javascript/test_runner.js --verbose
+```
+
+---
+
+#### **Step 2C: CURL Scripts**
+
+Running the script on Windows may cause some issues; in this case, use WSL2.
+
+```bash
+# Linux/Mac
+./api_tests/curl/test_runner_curl.sh --verbose
+
+# Windows
+api_tests\curl\test_runner_curl.bat
+```
+
+---
+
+### 🧪 Error Testing Examples
+
+#### **Test Invalid Data:**
+
+<div class="columns">
+<div class=" column small-code">
+
+#### **JavaScript**
+
+```javascript
+const invalidStudent = {
+    name:"  ",  // Empty name
+    email: "invalid-email",  // No @
+    year: "not-a-number"  // Wrong type
+};
+
+const response = await fetch('/students', {
+    method: 'POST',
+    body: JSON.stringify(invalidStudent)
+});
+
+// Should return 400 Bad Request
+assert(response.status === 400);
+```
+
+</div>
+<div class=" column small-code">
+
+#### **CURL**
+
+```bash
+# Test with invalid data
+invalid_data='{
+    "name":"  ",
+    "email": "invalid-email",
+    "year": "not-a-number"
+}'
+response=$(curl -s -w "%{http_code}" \
+    -X POST \
+    -H "Content-Type: application/json" \
+    -d "$invalid_data" \
+    http://localhost:8000/students)
+http_code=$(echo "$response" | tail -n1)
+if [ "$http_code" = "400" ]; then
+    echo "✅ Validation works!"
+fi
+```
+
+</div>
+</div>
+
+---
+
+#### 🧪 Test 1: Connection Test
+
+**Goal**: Verify the server is running and responding
+
+<div class="columns">
+<div class="column">
+
+##### **JavaScript**
+
+```javascript
+async function testConnection() {
+    const response = await fetch(
+        'http://localhost:8000'
+    );
+    
+    if (response.ok) {
+        console.log('✅ Server running!');
+    } else {
+        console.log('❌ Connection failed');
+    }
+}
+```
+
+</div>
+<div class="column">
+
+##### **CURL**
+
+```bash
+# Basic connection test
+curl -s http://localhost:8000
+
+# With status code check
+response=$(curl -s -w "%{http_code}" \
+    http://localhost:8000)
+http_code=$(echo "$response" | tail -n1)
+
+if [ "$http_code" = "200" ]; then
+    echo "✅ Server running!"
+else
+    echo "❌ Connection failed"
+fi
+```
+
+</div>
+</div>
+
+---
+
+#### ✅ Test 2: GET All Students
+
+**Goal**: Verify the API returns student data correctly
+
+<div class="columns">
+<div class=" column small-code">
+
+##### **JavaScript**
+
+```javascript
+async function testGetStudents() {
+    const response = await fetch(
+        'http://localhost:8000/students'
+    );
+    const data = await response.json();
+    
+    // Validate structure
+    if (data.success && 
+        Array.isArray(data.data)) {
+        console.log('✅ Structure OK');
+    }
+    
+    // Validate count
+    if (data.count === data.data.length) {
+        console.log('✅ Count matches');
+    }
+}
+```
+
+</div>
+<div class=" column small-code">
+
+##### **CURL**
+
+```bash
+# Get students and validate
+response=$(curl -s \
+    http://localhost:8000/students)
+
+# Check for success field
+if echo "$response" | grep -q '"success":true'; then
+    echo "✅ Success field found"
+fi
+# Check for data array
+if echo "$response" | grep -q '"data":\['; then
+    echo "✅ Data array found"
+fi
+# Check for count field
+if echo "$response" | grep -q '"count":[0-9]'; then
+    echo "✅ Count field found"
+fi
+```
+
+</div>
+</div>
+
+---
+
+#### 📝 Test 3: POST Create Student
+
+**Goal**: Create a new student and verify the data
+
+<div class="columns">
+<div class=" column small-code">
+
+##### **JavaScript**
+
+```javascript
+async function testCreateStudent() {
+    const newStudent = { name: 'Test Student', ... , year: 2};
+    const response = await fetch(
+        'http://localhost:8000/students', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(newStudent)
+    });
+    const result = await response.json();
+    // Validate creation
+    if (response.status === 201 && 
+        result.data.name === newStudent.name) {
+        console.log('✅ Student created!');
+    }
+}
+```
+
+</div>
+<div class=" column small-code">
+
+##### **CURL**
+
+```bash
+new_student='{
+    "name": "Test Student CURL", ..., "year": 1
+}'
+response=$(curl -s -w "%{http_code}" \
+    -X POST \
+    -H "Content-Type: application/json" \
+    -d "$new_student" \
+    http://localhost:8000/students)
+http_code=$(echo "$response" | tail -n1)
+json_data=$(echo "$response" | head -n -1)
+if [ "$http_code" = "201" ]; then
+    echo "✅ Student created!"
+    # Extract ID for later use
+    student_id=$(echo "$json_data" | \
+        grep -o '"id":[0-9]*' | \
+        grep -o '[0-9]*')
+fi
+```
+
+</div>
+</div>
+
+---
+
+#### 🔄 Test 4: PUT Update Student
+
+**Goal**: Update a student and verify changes
+
+<div class="columns">
+<div class=" column small-code">
+
+##### **JavaScript**
+
+```javascript
+async function testUpdateStudent(id) {
+    const updateData = {name: 'Updated Student',major: 'Data Science'};
+    const response = await fetch(
+        `http://localhost:8000/students/${id}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(updateData)
+    });
+    const result = await response.json();
+    // Validate update
+    if (result.data.name === updateData.name &&
+        result.data.major === updateData.major) {
+        console.log('✅ Student updated!');
+    }
+}
+```
+
+</div>
+<div class=" column small-code">
+
+##### **CURL**
+
+```bash
+update_data=' {"name": "Updated Test Student",
+              "major": "Data Science"}'
+response=$(curl -s \
+    -X PUT \
+    -H "Content-Type: application/json" \
+    -d "$update_data" \
+    http://localhost:8000/students/$student_id)
+
+# Validate update
+if echo "$response" | grep -q "Updated Test Student"; then
+    echo "✅ Name updated!"
+fi
+
+if echo "$response" | grep -q "Data Science"; then
+    echo "✅ Major updated!"
+fi
+```
+
+</div>
+</div>
+
+---
+
+#### 🗑️ Test 5: DELETE Student
+
+**Goal**: Delete a student and verify removal
+
+<div class="columns">
+<div class=" column small-code">
+
+##### **JavaScript**
+
+```javascript
+async function testDeleteStudent(id) {
+    // Delete the student
+    const response = await fetch(
+        `http://localhost:8000/students/${id}`, {
+        method: 'DELETE'
+    });
+    if (response.ok) {
+        // Verify deletion
+        const verifyResponse = await fetch(
+            `http://localhost:8000/students/${id}`
+        );
+        if (verifyResponse.status === 404) {
+            console.log('✅ Student deleted!');
+        }
+    }
+}
+```
+
+</div>
+<div class=" column small-code">
+
+##### **CURL**
+
+```bash
+response=$(curl -s \
+    -X DELETE \
+    http://localhost:8000/students/$student_id)
+
+if echo "$response" | grep -q '"success":true'; then
+    # Verify deletion
+    verify_response=$(curl -s -w "%{http_code}" \
+        http://localhost:8000/students/$student_id)
+    verify_code=$(echo "$verify_response" | tail -n1)
+    
+    if [ "$verify_code" = "404" ]; then
+        echo "✅ Student deleted and verified!"
+    fi
+fi
+```
+
+</div>
+</div>
+
+---
+
+### 🔧 Advanced CURL Techniques
+
+#### **Debugging with Verbose Output:**
+
+```bash
+curl -v http://localhost:8000/students
+```
+
+#### **Save Response to File:**
+
+```bash
+curl -s http://localhost:8000/students > students.json
+```
+
+---
+
+#### **Check Response Time:**
+
+```bash
+curl -w "Time: %{time_total}s\n" -s http://localhost:8000/students
+```
+
+#### **Follow Redirects:**
+
+```bash
+curl -L http://localhost:8000/students
+```
+
+---
+
+#### **Custom Headers:**
+
+```bash
+curl -H "Authorization: Bearer token123" \
+     -H "Accept: application/json" \
+     http://localhost:8000/students
+```
+
+---
+
+## 🎯 What Makes a Good API Test?
+
+**Specific** 📝
+
+- Test one thing at a time
+- Clear pass/fail criteria
+- Focused validation
+
+**Reliable** 🔄
+
+- Consistent results
+- No random failures
+- Independent of other tests
+
+---
+
+**Fast** ⚡
+
+- Quick execution
+- Immediate feedback
+- Suitable for frequent running
+
+**Clear** 💡
+
+- Easy to understand
+- Descriptive error messages
+- Good documentation
+
+---
+
+### Test Anatomy: The AAA Pattern
+
+```bash
+# ARRANGE: Prepare test data
+new_student=' {"name": "Test", "email": "test@edu"}'
+
+# ACT: Execute the API call
+response=$(curl -s -X POST -H "Content-Type: application/json" \
+    -d "$new_student" http://localhost:8000/students)
+
+# ASSERT: Verify the results
+if echo "$response" | grep -q '"success":true'; then
+    echo "✅ Test passed!"
+else
+    echo "❌ Test failed!"
+fi
+```
+
+**Every good test follows this pattern!**
+
+---
+
+### 📋 Testing Checklist
+
+#### For Each Endpoint Test
+
+- [ ] **HTTP Status Code** - Is it what we expect?
+- [ ] **Response Structure** - Does it match our API spec?
+- [ ] **Data Types** - Are fields the right type?
+- [ ] **Required Fields** - Are mandatory fields present?
+- [ ] **Business Logic** - Does the data make sense?
+- [ ] **Error Handling** - What happens with bad input?
+
+---
+
+### 🚨 Common Testing Mistakes
+
+#### ❌ **Don't Do This:**
+
+- Test multiple things in one test
+- Ignore HTTP status codes
+- Assume data structure without checking
+- Skip error scenarios
+- Make tests dependent on each other
+
+---
+
+#### ✅ **Do This Instead:**
+
+- One assertion per test concept
+- Always check status codes first
+- Validate response structure
+- Test both success and failure cases
+- Make tests independent
+
+---
+
+### 💻 CURL vs JavaScript: When to Use What?
+
+<div class="columns">
+<div class="column">
+
+#### **Use CURL When:**
+
+- Quick manual testing
+- Shell script automation
+- CI/CD pipelines
+- Server environments
+- Learning HTTP basics
+- Cross-platform compatibility
+
+</div>
+<div class="column">
+
+#### **Use JavaScript When:**
+
+- Web application testing
+- Complex data validation
+- Interactive interfaces
+- Learning programming concepts
+- Frontend integration testing
+- Rich error reporting
+
+</div>
+</div>
+
+---
+
+### 📚 Key Takeaways
+
+#### **Testing is Essential** 🎯
+
+- Prevents bugs in production
+- Builds confidence in your code
+- Improves code quality
+
+#### **Multiple Tools Available** 🛠️
+
+- JavaScript for web-based testing
+- CURL for command-line automation
+- Both achieve the same goals
+
+---
+
+#### **Start Simple** 🚀
+
+- Connection tests first
+- Basic functionality second
+- Edge cases third
+
+#### **Be Systematic** 📋
+
+- Test all HTTP methods
+- Validate response structure
+- Check error scenarios
