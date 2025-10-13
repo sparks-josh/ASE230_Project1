@@ -23,7 +23,7 @@ Total Points: 200
   - List their names: create_board, add_issue_comment, update_issue, update_issue_status, create_issue
 - [20/20] Made cURL test code (should test all APIs, 2 points per 1 API).
   - List the file name: located in /code/cURL API Tests; boards_api_test.php, issues_api_tests.php, users_api_tests.php
-- [ /20] Made HTML/JavaScript test code (should test all APIs, 2 points per 1 API).
+- [20/20] Made HTML/JavaScript test code (should test all APIs, 2 points per 1 API).
   - List the file name: located in /code/HTML_JavaScript_Tests/;boards_api_tests.html, issues_api_tests.html, users_api_tests.html
 
 ---
@@ -55,7 +55,7 @@ Total points earned in this section:
 | ≥ 8 REST APIs (5 pts each)          | 40      | [40/40]  |
 | ≥ 2 Bearer Token APIs (10 pts each) | 20      | [20/20]  |
 | cURL test code (all APIs)           | 20      | [20/20]  |
-| HTML/JS test code (all APIs)        | 20      | [ /20]  |
+| HTML/JS test code (all APIs)        | 20      | [20/20]  |
 | DB integration (CRUD)               | 10      | [10/10]  |
 | GitHub repository link              | 20      | [ /20]  |
 | Copy in `code/` directory           | T/F     | [ T/F ] |
