@@ -21,7 +21,7 @@
     <script>
         async function getApiInfo() {
           try {
-            const response = await fetch('../api_code/boards.php'); 
+            const response = await fetch('../boards.php'); 
             const data = await response.text();             
             console.log(data);    
                                      
@@ -34,7 +34,7 @@
           getApiInfo();
         }
 //Sources:
-//Frontend with JavaScript.md, pages 16, 19
+//Frontend with JavaScript.md, pages 16, 19, 20
     </script>
 </body>
 </html>
