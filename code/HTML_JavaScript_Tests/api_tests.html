@@ -41,6 +41,7 @@
         
         const form = event.target;
         const formData = new FormData(form);
+        const boardID = formData.get('boardID');
         
         try {
           const response = await fetch('../api_code/boards.php/${boardID}');
