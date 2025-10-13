@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<head>Test</head>
+<body>
+    <div class="container"> 
+        <button onclick="getBoards()">Show All Boards</button>
+    </div>
+
+    <div id="result" class="result">
+      Click any button above to test the API...
+    </div>
+
+    <form id="form" class="form">
+        Board ID: <input type="text" name="boardID"><br>
+      <input type="submit" value="Submit">
+    </form>
+
+    <form id="form2" class="form2">
+        Board ID: <input type="text" name="boardID"><br>
+        Board Name: <input type="text" name="boardID"><br>
+      <input type="submit" value="Submit">
+    </form>
+
+    <script>
+        async function getBoardsInfo() {
+          try {
+            const response = await fetch('../api_code/boards.php'); 
+            const data = await response.text();             
+            document.getElementById('result').textContent = 
+              data;                      
+          } catch (error) {
+            document.getElementById('result').textContent =
+              'Error: ' + error.message;              
+          }
+      }
+      function getBoards() {
+        getBoardsInfo();
+        //My output: Found 1 boards:<br>ID: 1 - Name: Test<br>
+      }
+
+      document.querySelector('form').addEventListener('submit' , async function (event) {
+        event.preventDefault(); 
+        
+        const form = event.target;
+        const formData = new FormData(form);
+        const boardID = formData.get('boardID');
+        
+        try {
+          const response = await fetch(`../api_code/boards.php/${boardID}`);
+          const data = await response.text();
+          document.getElementById('result').textContent = 
+            data;
+        } catch (error) {
+          document.getElementById('result').textContent =
+            'Error: ' + error.message;
+        }
+        //My output: Found board: 1 (Name: Test)
+      });
+
+      document.querySelector('#form2').addEventListener('submit' , async function (event) {
+        event.preventDefault(); 
+        
+        const form = event.target;
+        const formData = new FormData(form);
+        
+        try {
+          const response = await fetch(`../api_code/boards.php/`, {
+            method: 'POST',
+            body: formData
+        });
+          const data = await response.text();
+          document.getElementById('result').textContent = 
+            data;
+        } catch (error) {
+          document.getElementById('result').textContent =
+            'Error: ' + error.message;
+        }
+        //My output: {"error":"Valid bearer token required"}
+      });
+
+//Sources:
+//Frontend with JavaScript.md, pages 16, 19, 20, 21
+//Handle_User_Inputs_and_Formats.md, pages 3, 9
+    </script>
+</body>
+</html>
