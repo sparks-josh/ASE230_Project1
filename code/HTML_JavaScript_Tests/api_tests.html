@@ -2,20 +2,42 @@
 <head>Test</head>
 <body>
     <div class="container"> 
-        <button onclick="getBoards()">Get API Information</button>
-        <button onclick="getIssues()">Get API Information</button>
-        <button onclick="getUsers()">Get API Information</button>
+        <button onclick="getBoards()">Get All Board Information</button>
+        <button onclick="getBoardID()">Get Specific Board Information</button>
+        <button onclick="createBoard()">Create Board</button>
+         <button onclick="getIssues()">Get All Issue Information</button>
+        <button onclick="getIssueID()">Get Specific Issue Information</button>
+        <button onclick="createIssue()">Create Issue</button>
+        <button onclick="updateIssue()">Update Issue</button>
+        <button onclick="updateIssueStatus()">Update Issue Status</button>
+        <button onclick="addIssueComment()">Add Issue Comment</button>
+        <button onclick="getUsers()">Get All User Information</button>
+        <button onclick="getUserID()">Get Specific User Information</button>
+        <button onclick="createUser()">Create User</button>
     </div>
     <script>
         const API_BASE = 'http://localhost:8000';
-        async function apiCall(endpoint) {
-            ...
+        async function getApiInfo() {
+          try {
+            const boardResponse = await fetch('code/API_Code/boards.php'); 
+            const boardData = await boardResponse.json();             
+            console.log(boardData);    
+            const issueResponse = await fetch('code/API_Code/issues.php'); 
+            const issueData = await issueResponse.json();             
+            console.log(issueData); 
+            const userResponse = await fetch('code/API_Code/users.php'); 
+            const userData = await userResponse.json();             
+            console.log(userData);                           
+          } catch (error) {
+            console.error('Error:', error);                
           }
+      }
+
         function getBoards() {
           apiCall('/api');
         }
 //Sources:
-//Frontend with JavaScript.md, pages 16
+//Frontend with JavaScript.md, pages 16, 19
     </script>
 </body>
 </html>
