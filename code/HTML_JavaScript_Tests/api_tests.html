@@ -19,7 +19,7 @@
         async function getApiInfo() {
           try {
             const response = await fetch('../api_code/boards.php'); 
-            const data = await response.json();             
+            const data = await response.text();             
             console.log(data);    
                                      
           } catch (error) {
