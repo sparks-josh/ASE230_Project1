@@ -15,11 +15,28 @@
         <button onclick="getUserID()">Get Specific User Information</button>
         <button onclick="createUser()">Create User</button>
     </div>
+
     <div id="result" class="result">
       Click any button above to test the API...
     </div>
+
+    <form id="form" class="form">
+        Board ID: <input type="text" name="boardID"><br>
+      <input type="submit" value="Submit">
+    </form>
+
     <script>
-        async function getApiInfo() {
+        async function getBoardsInfo() {
+          try {
+            const response = await fetch('../api_code/boards.php'); 
+            const data = await response.text();             
+            console.log(data);    
+                                     
+          } catch (error) {
+            console.error('Error:', error);                
+          }
+      }
+      async function getBoardIDInfo() {
           try {
             const response = await fetch('../api_code/boards.php'); 
             const data = await response.text();             
@@ -31,10 +48,17 @@
       }
 
         function getBoards() {
-          getApiInfo();
+          getBoardsInfo();
+          //output: Found 1 boards:<br>ID: 1 - Name: Test<br>
         }
+        function getBoardID() {
+          getBoardIDInfo();
+          //output: 
+        }
+
 //Sources:
 //Frontend with JavaScript.md, pages 16, 19, 20
+//Handle_User_Inputs_and_Formats.md, pages 3
     </script>
 </body>
 </html>
