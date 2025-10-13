@@ -15,10 +15,13 @@
         <button onclick="getUserID()">Get Specific User Information</button>
         <button onclick="createUser()">Create User</button>
     </div>
+    <div id="result" class="result">
+      Click any button above to test the API...
+    </div>
     <script>
         async function getApiInfo() {
           try {
-            const response = await fetch('../api_code/boards/'); 
+            const response = await fetch('../api_code/boards.php'); 
             const data = await response.text();             
             console.log(data);    
                                      
