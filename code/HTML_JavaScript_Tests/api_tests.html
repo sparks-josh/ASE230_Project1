@@ -44,8 +44,7 @@
         const boardID = formData.get('boardID');
         
         try {
-          const response = await fetch('../api_code/boards.php/${boardID}');
-
+          const response = await fetch(`../api_code/boards.php/${boardID}`);
           const data = await response.json();
           document.getElementById('result').textContent = data;
         } catch (error) {
