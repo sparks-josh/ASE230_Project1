@@ -48,8 +48,8 @@ function requireAuth() {
 $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $path = trim($path, '/');
 $segments = explode('/', $path);
-$resource = $segments[0] ?? ''; 
-$id = $segments[1] ?? null; 
+$resource = $segments[1] ?? ''; 
+$id = $segments[2] ?? null; 
 
 $method = $_SERVER['REQUEST_METHOD'];
 
