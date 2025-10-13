@@ -40,10 +40,10 @@ Total Points: 200
 | users               |
 +---------------------+
 4 rows in set (0.003 sec)
-- [ /20] Code pushed to **GitHub repository** - Full points if pushed to GitHub and provide a link, no partial points 
-  - Write your GitHub repository link:
-- [T/F] Copy included in `code/` directory  
-  - List your zip file name in the code directory:
+- [20/20] Code pushed to **GitHub repository** - Full points if pushed to GitHub and provide a link, no partial points 
+  - Write your GitHub repository link: https://github.com/sparks-josh/ASE230_Project1.git
+- [T] Copy included in `code/` directory  
+  - List your zip file name in the code directory: code.zip
   - Earn 0 points in this section when you do not copy your code.
 
 ---
@@ -57,9 +57,9 @@ Total points earned in this section:
 | cURL test code (all APIs)           | 20      | [20/20]  |
 | HTML/JS test code (all APIs)        | 20      | [20/20]  |
 | DB integration (CRUD)               | 10      | [10/10]  |
-| GitHub repository link              | 20      | [ /20]  |
-| Copy in `code/` directory           | T/F     | [ T/F ] |
-| **Total**                           | **130** | [ /130] |
+| GitHub repository link              | 20      | [20/20]  |
+| Copy in `code/` directory           | T/F     | [ T ] |
+| **Total**                           | **130** | [ 130/130] |
 
 ---
 
