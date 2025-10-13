@@ -35,61 +35,61 @@
   </div>
 
   <script>
-      async function getBoardsInfo() {
-        try {
-          const response = await fetch('../api_code/boards.php'); 
-          const data = await response.text();             
-          document.getElementById('result').textContent = 
-            data;                      
-        } catch (error) {
-          document.getElementById('result').textContent =
-            'Error: ' + error.message;              
-        }
+    async function getBoardsInfo() {
+      try {
+        const response = await fetch('../api_code/boards.php'); 
+        const data = await response.text();             
+        document.getElementById('result').textContent = 
+          data;                      
+      } catch (error) {
+        document.getElementById('result').textContent =
+          'Error: ' + error.message;              
       }
-      function getBoards() {
-        getBoardsInfo();
-        //My output: Found 1 boards:<br>ID: 1 - Name: Test<br>
+    }
+    function getBoards() {
+      getBoardsInfo();
+      //My output: Found 1 boards:<br>ID: 1 - Name: Test<br>
+    }
+
+    document.querySelector('form').addEventListener('submit' , async function (event) {
+      event.preventDefault(); 
+        
+      const form = event.target;
+      const formData = new FormData(form);
+      const boardID = formData.get('boardID');
+        
+      try {
+        const response = await fetch(`../api_code/boards.php/${boardID}`);
+        const data = await response.text();
+        document.getElementById('result2').textContent = 
+          data;
+      } catch (error) {
+        document.getElementById('result2').textContent =
+          'Error: ' + error.message;
       }
+      //My output: Found board: 1 (Name: Test)
+    });
 
-      document.querySelector('form').addEventListener('submit' , async function (event) {
-        event.preventDefault(); 
+    document.querySelector('#form2').addEventListener('submit' , async function (event) {
+      event.preventDefault(); 
         
-        const form = event.target;
-        const formData = new FormData(form);
-        const boardID = formData.get('boardID');
+      const form = event.target;
+      const formData = new FormData(form);
         
-        try {
-          const response = await fetch(`../api_code/boards.php/${boardID}`);
-          const data = await response.text();
-          document.getElementById('result2').textContent = 
-            data;
-        } catch (error) {
-          document.getElementById('result2').textContent =
-            'Error: ' + error.message;
-        }
-        //My output: Found board: 1 (Name: Test)
-      });
-
-      document.querySelector('#form2').addEventListener('submit' , async function (event) {
-        event.preventDefault(); 
-        
-        const form = event.target;
-        const formData = new FormData(form);
-        
-        try {
-          const response = await fetch(`../api_code/boards.php/`, {
-            method: 'POST',
-            body: formData
+      try {
+        const response = await fetch(`../api_code/boards.php/`, {
+          method: 'POST',
+          body: formData
         });
-          const data = await response.text();
-          document.getElementById('result3').textContent = 
-            data;
-        } catch (error) {
-          document.getElementById('result3').textContent =
-            'Error: ' + error.message;
-        }
-        //My output: {"error":"Valid bearer token required"}
-      });
+        const data = await response.text();
+        document.getElementById('result3').textContent = 
+          data;
+      } catch (error) {
+        document.getElementById('result3').textContent =
+          'Error: ' + error.message;
+      }
+      //My output: {"error":"Valid bearer token required"}
+    });
 
 //Sources:
 //Frontend with JavaScript.md, pages 16, 19, 20, 21
