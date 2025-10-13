@@ -44,7 +44,7 @@
       }
       function getBoards() {
         getBoardsInfo();
-        //output: Found 1 boards:<br>ID: 1 - Name: Test<br>
+        //My output: Found 1 boards:<br>ID: 1 - Name: Test<br>
       }
 
       document.querySelector('form').addEventListener('submit' , async function (event) {
@@ -63,7 +63,7 @@
           document.getElementById('result').textContent =
             'Error: ' + error.message;
         }
-        //output: Found board: 1 (Name: Test)
+        //My output: Found board: 1 (Name: Test)
       });
 
       document.querySelector('#form2').addEventListener('submit' , async function (event) {
@@ -84,7 +84,7 @@
           document.getElementById('result').textContent =
             'Error: ' + error.message;
         }
-        //output: Found board: 1 (Name: Test)
+        //My output: {"error":"Valid bearer token required"}
       });
 
 //Sources:
