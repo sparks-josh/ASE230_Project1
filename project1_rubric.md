@@ -17,19 +17,29 @@ Total Points: 200
 
 ## 🔹 REST API Implementation (130 pts)
 
-- [ /40] Implemented at least 8 REST APIs in PHP/MySQL (5 points per 1 REST API).
-  - List their names:
-- [ /20] Implemented at least 2 Bearer Token authentication REST APIs in PHP/MySQL (10 points per 1 Bearer Token REST API)
-  - List their names:
-- [ /20] Made cURL test code (should test all APIs, 2 points per 1 API).
-  - List the file name:
+- [40/40] Implemented at least 8 REST APIs in PHP/MySQL (5 points per 1 REST API).
+  - List their names: get_board, get_all_boards, create_board, get_issue, get_all_issues, create_issue, update_issue, update_issue_status, add_issue_comment, get_user, get_all_users, create_user
+- [20/20] Implemented at least 2 Bearer Token authentication REST APIs in PHP/MySQL (10 points per 1 Bearer Token REST API)
+  - List their names: create_board, add_issue_comment, update_issue, update_issue_status, create_issue
+- [20/20] Made cURL test code (should test all APIs, 2 points per 1 API).
+  - List the file name: located in /code/cURL API Tests; boards_api_test.php, issues_api_tests.php, users_api_tests.php
 - [ /20] Made HTML/JavaScript test code (should test all APIs, 2 points per 1 API).
-  - List the file name:
+  - List the file name: located in /code/HTML/JavaScript Tests;
 
 ---
 
-- [ /10] Database integration working (CRUD) - Full points if MySQL works fine, no partial points
+- [10/10] Database integration working (CRUD) - Full points if MySQL works fine, no partial points
   - List your MySQL table names:
+  mysql> show TABLES;
++---------------------+
+| Tables_in_jira_lite |
++---------------------+
+| boards              |
+| comments            |
+| issues              |
+| users               |
++---------------------+
+4 rows in set (0.003 sec)
 - [ /20] Code pushed to **GitHub repository** - Full points if pushed to GitHub and provide a link, no partial points 
   - Write your GitHub repository link:
 - [T/F] Copy included in `code/` directory  
@@ -42,11 +52,11 @@ Total points earned in this section:
 
 | Task                                | Points  | Earned  |
 |-------------------------------------|---------|---------|
-| ≥ 8 REST APIs (5 pts each)          | 40      | [ /40]  |
-| ≥ 2 Bearer Token APIs (10 pts each) | 20      | [ /20]  |
-| cURL test code (all APIs)           | 20      | [ /20]  |
+| ≥ 8 REST APIs (5 pts each)          | 40      | [40/40]  |
+| ≥ 2 Bearer Token APIs (10 pts each) | 20      | [20/20]  |
+| cURL test code (all APIs)           | 20      | [20/20]  |
 | HTML/JS test code (all APIs)        | 20      | [ /20]  |
-| DB integration (CRUD)               | 10      | [ /10]  |
+| DB integration (CRUD)               | 10      | [10/10]  |
 | GitHub repository link              | 20      | [ /20]  |
 | Copy in `code/` directory           | T/F     | [ T/F ] |
 | **Total**                           | **130** | [ /130] |
