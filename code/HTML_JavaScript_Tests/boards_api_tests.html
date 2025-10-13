@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<head>Test</head>
+<head>Board API Tests</head>
 <body>
     <div class="container"> 
         <button onclick="getBoards()">Show All Boards</button>
@@ -16,13 +16,21 @@
       <input type="submit" value="Submit">
     </form>
 
+    <div id="result2" class="result2">
+      Enter Board ID above and click submit to test the API...
+    </div>
+
     <br>
-    
+
     <form id="form2" class="form2">
         Board ID: <input type="text" name="boardID"><br>
         Board Name: <input type="text" name="boardID"><br>
       <input type="submit" value="Submit">
     </form>
+
+    <div id="result3" class="result3">
+      Enter Board ID and Board Name above and click submit to test the API...
+    </div>
 
     <script>
         async function getBoardsInfo() {
@@ -51,10 +59,10 @@
         try {
           const response = await fetch(`../api_code/boards.php/${boardID}`);
           const data = await response.text();
-          document.getElementById('result').textContent = 
+          document.getElementById('result2').textContent = 
             data;
         } catch (error) {
-          document.getElementById('result').textContent =
+          document.getElementById('result2').textContent =
             'Error: ' + error.message;
         }
         //My output: Found board: 1 (Name: Test)
@@ -72,10 +80,10 @@
             body: formData
         });
           const data = await response.text();
-          document.getElementById('result').textContent = 
+          document.getElementById('result3').textContent = 
             data;
         } catch (error) {
-          document.getElementById('result').textContent =
+          document.getElementById('result3').textContent =
             'Error: ' + error.message;
         }
         //My output: {"error":"Valid bearer token required"}
