@@ -30,8 +30,46 @@
     <input type="submit" value="Submit">
   </form>
 
+  <br>
+
   <div id="result3" class="result3">
     Enter Issue ID and Issue Name above and click submit to test the API...
+  </div>
+
+  <form id="form3" class="form3">
+      Issue ID: <input type="text" name="id"><br>
+      Issue Name: <input type="text" name="name"><br>
+      Board ID: <input type="text" name="board_id"><br>
+      Issue Status: <input type="text" name="status"><br>
+    <input type="submit" value="Submit">
+  </form>
+
+  <div id="result4" class="result4">
+    Enter updated Issue ID, Issue Name, Board ID, and Issue Status above and click submit to test the API...
+  </div>
+
+  <br>
+
+  <form id="form4" class="form4">
+      Issue ID: <input type="text" name="id"><br>
+      Issue Status: <input type="text" name="status"><br>
+    <input type="submit" value="Submit">
+  </form>
+
+  <div id="result5" class="result5">
+    Enter Issue ID and updated Issue Status above and click submit to test the API...
+  </div>
+
+  <br>
+
+  <form id="form5" class="form5">
+      Issue ID: <input type="text" name="id"><br>
+      Issue Comment: <input type="text" name="comment"><br>
+    <input type="submit" value="Submit">
+  </form>
+
+  <div id="result6" class="result6">
+    Enter Issue ID and updated Issue Status above and click submit to test the API...
   </div>
 
   <script>
@@ -90,6 +128,71 @@
       }
       //My output: User 'test' added successfully<br>
     });
+
+    document.querySelector('#form3').addEventListener('submit' , async function (event) {
+      event.preventDefault(); 
+        
+      const form = event.target;
+      const formData = new FormData(form);
+        
+      try {
+        const response = await fetch(`../api_code/issues.php/`, {
+          method: 'POST',
+          body: formData
+        });
+        const data = await response.text();
+        document.getElementById('result4').textContent = 
+          data;
+      } catch (error) {
+        document.getElementById('result4').textContent =
+          'Error: ' + error.message;
+      }
+      //My output: User 'test' added successfully<br>
+    });
+
+    document.querySelector('#form4').addEventListener('submit' , async function (event) {
+      event.preventDefault(); 
+        
+      const form = event.target;
+      const formData = new FormData(form);
+        
+      try {
+        const response = await fetch(`../api_code/issues.php/`, {
+          method: 'POST',
+          body: formData
+        });
+        const data = await response.text();
+        document.getElementById('result5').textContent = 
+          data;
+      } catch (error) {
+        document.getElementById('result5').textContent =
+          'Error: ' + error.message;
+      }
+      //My output: User 'test' added successfully<br>
+    });
+
+    document.querySelector('#form5').addEventListener('submit' , async function (event) {
+      event.preventDefault(); 
+        
+      const form = event.target;
+      const formData = new FormData(form);
+        
+      try {
+        const response = await fetch(`../api_code/issues.php/`, {
+          method: 'POST',
+          body: formData
+        });
+        const data = await response.text();
+        document.getElementById('result6').textContent = 
+          data;
+      } catch (error) {
+        document.getElementById('result6').textContent =
+          'Error: ' + error.message;
+      }
+      //My output: User 'test' added successfully<br>
+    });
+
+
 
 //Sources:
 //Frontend with JavaScript.md, pages 16, 19, 20, 21
