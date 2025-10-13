@@ -105,7 +105,6 @@ function get_all_boards($conn) {
 function create_board($conn) {
     $name = $_POST['name'] ?? '';
     $id = $_POST['id'] ?? '';
-    $status = $_POST['status'] ?? '';
 
     $sql = "INSERT INTO boards (name, id) VALUES (?, ?)";
     $stmt = $conn->prepare($sql);

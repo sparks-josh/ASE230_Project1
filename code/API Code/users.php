@@ -1,81 +1,91 @@
 <?php
-$method = $_SERVER['REQUEST_METHOD'];
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "jira_lite";
+
+$conn = new mysqli($servername, $username, $password, $dbname);
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+    exit;
+}
+
 $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $path = trim($path, '/');
 $segments = explode('/', $path);
 $resource = $segments[0] ?? ''; 
 $id = $segments[1] ?? null; 
+
+$method = $_SERVER['REQUEST_METHOD'];
+
 switch ($method) {
     case 'GET':
-        if ($id) { get_user($id); } 
-        else { get_all_users(); }
+        if ($id) { get_user($conn, $id); } 
+        else { get_all_users($conn); }
         break;
     case 'POST':
-        create_user();
+        create_user($conn);
         break;
     default:
-        http_response_code(405);
-        echo json_encode(['error' => 'Method not allowed']);
-        break;
+    http_response_code(405);
+    echo json_encode(['error' => 'Method not allowed']);
+    exit;
 }
-function get_user($id) {
-    $users = load_users();
-    
-    foreach ($users as $user) {
-        if ($user['id'] == $id) {
-            echo json_encode([
-                'success' => true,
-                'data' => $user
-            ]);
-            return;
-        }
+
+function get_user($conn, $id) {
+    $sql = "SELECT * FROM users WHERE id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        echo "Found user: " . $row["id"] . " (Name: " . $row["name"] . ") <br>";
+    } else {
+        echo "No User with ID $id<br>";
     }
-    
-    http_response_code(404);
-    echo json_encode([
-        'success' => false,
-        'error' => 'User not found'
-    ]);
+    $stmt->close();
 }
 
-function get_all_users() {
-    $users = load_users();
-    echo json_encode([
-        'success' => true,
-        'data' => $users,
-        'count' => count($users)
-    ]);
-}
-function create_user() {
-    $input = getRequestData();
-    
-    if (!$input) {
-        http_response_code(400);
-        echo json_encode([
-            'success' => false,
-            'error' => 'Invalid JSON data'
-        ]);
-        return;
+function get_all_users($conn) {
+    $sql = "SELECT * FROM users";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+    echo "Found " . $result->num_rows . " users:<br>";
+    while($row = $result->fetch_assoc()) {
+        echo "ID: " . $row["id"]. " - Name: " . $row["name"]. "<br>";
     }
-
-    $users = load_users();
-
-    $new_id = get_next_id($users);
-
-    $new_user = new user();
-    $new_user->setId($new_id);
-    $new_user->setName($input['name'] ?? '');
-
-    $users[] = $new_user->toArray();
-    
-    save_users($users);
-    
-    http_response_code(201);
-    echo json_encode([
-        'success' => true,
-        'message' => 'User created successfully',
-        'data' => $new_user->toArray()
-    ]);
+    } else {
+        echo "No users found<br>";
+    }
+    $stmt->close();
 }
-// Retrieved from PowerPoint rest api build rest api server with php
+
+
+function create_user($conn) {
+    $name = $_POST['name'] ?? '';
+    $id = $_POST['id'] ?? '';
+
+    $sql = "INSERT INTO users (name, id) VALUES (?, ?)";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("si", $name, $id);
+
+    if ($stmt->execute()) {
+        echo "User '$name' added successfully<br>";
+    } else {
+        echo "Error: " . $stmt->error . "<br>";
+    }
+    $stmt->close(); 
+}
+
+// References:
+// Simple_PHP_Server_with_MYSQL.md, page number 9
+// Building a REST API Server with PHP.md, page numbers 13, 14, 15, 19, 31, 32, 33, 36
+// CRUD_operation.md, page numbers 1, 3, 5, 6, 8, 
+// PUT and POST Requests.md, page numbers 32, 34, 35, 36, 38, 39
+// Bearer Token Authenticatoin.md, page numbers 11, 12, 14
 ?>
