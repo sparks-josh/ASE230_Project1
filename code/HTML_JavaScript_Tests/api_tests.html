@@ -19,22 +19,17 @@
         const API_BASE = 'http://localhost:8000';
         async function getApiInfo() {
           try {
-            const boardResponse = await fetch('code/API_Code/boards.php'); 
-            const boardData = await boardResponse.json();             
-            console.log(boardData);    
-            const issueResponse = await fetch('code/API_Code/issues.php'); 
-            const issueData = await issueResponse.json();             
-            console.log(issueData); 
-            const userResponse = await fetch('code/API_Code/users.php'); 
-            const userData = await userResponse.json();             
-            console.log(userData);                           
+            const response = await fetch('code/API_Code/boards.php'); 
+            const data = await response.json();             
+            console.log(data);    
+                                     
           } catch (error) {
             console.error('Error:', error);                
           }
       }
 
         function getBoards() {
-          getApiInfo('boards.php');
+          getApiInfo();
         }
 //Sources:
 //Frontend with JavaScript.md, pages 16, 19
