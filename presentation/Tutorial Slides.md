@@ -1,17 +1,10 @@
 ---
 marp: true
-theme: default
-class: lead
-paginate: true
-backgroundColor: #fff
 ---
 
-<!-- _class: frontpage -->
-<!-- _paginate: skip -->
-
 # Project 1 Tutorial Slides
-
-Joshua Sparks - ASE 230
+Joshua Sparks, Northern Ketucky University
+Prepared for: Prof. Samuel Cho, ASE 230, Fall 2025
 
 ---
 
@@ -215,7 +208,7 @@ HTML/JavaScript Response:
 - $stmt->bind_param("si", $name, $id);
   - Binds the specified name and ID to the query
 - if ($stmt->execute()) 
-  - Checks if user creation is sucessful
+  - Checks if user creation is successful
     - Yes -> displays "User '$name' added successfully"
     - No -> displays ""Error: " . $stmt->error" message
     
@@ -285,7 +278,7 @@ HTML/JavaScript Response:
 
 ### Explanation for get_board API:
 
-- SELECT * FROM users WHERE id = ?
+- SELECT * FROM boards WHERE id = ?
   - selects all data from the boards table where ID is the specified ID
 - $stmt = $conn->prepare($sql);
   - Prepares the query for the database
@@ -444,7 +437,7 @@ HTML/JavaScript Response:
 - $stmt->bind_param("si", $name, $id);
   - Binds the specified name and ID to the query
 - if ($stmt->execute()) 
-  - Checks if board creation is sucessful
+  - Checks if board creation is successful
     - Yes -> displays "Board '$name' added successfully"
     - No -> displays ""Error: " . $stmt->error" message
     
@@ -670,7 +663,7 @@ HTML/JavaScript Response:
 - $stmt->bind_param("sis", $name, $board_id, $status);
   - Binds the specified name, board ID, and status to the query
 - if ($stmt->execute()) 
-  - Checks if issue creation is sucessful
+  - Checks if issue creation is successful
     - Yes -> displays "Issue '$name' added successfully"
     - No -> displays ""Error: " . $stmt->error" message
     
@@ -753,7 +746,7 @@ HTML/JavaScript Response (no error, bearer token working properly):
 - $stmt->bind_param("sisi", $new_name, $new_board_id, $new_status, $id);
   - Binds the specified name, board ID, and status to the query
 - if ($stmt->execute()) 
-  - Checks if issue update is sucessful
+  - Checks if issue update is successful
     - Yes -> displays "Issue with ID $id updated successfully"
     - No -> displays ""Error updating issue: " . $stmt->error" message
     
@@ -829,7 +822,7 @@ HTML/JavaScript Response (no error, bearer token working properly):
 - $stmt->bind_param("si", $new_status, $id);
   - Binds the specified status to the query
 - if ($stmt->execute()) 
-  - Checks if issue update is sucessful
+  - Checks if issue update is successful
     - Yes -> displays "Issue with ID $id updated successfully"
     - No -> displays ""Error updating issue: " . $stmt->error" message
 
@@ -901,7 +894,7 @@ HTML/JavaScript Response (no error, bearer token working properly):
 - $stmt->bind_param("si", $comment, $id);
   - Binds the specified comment and ID to the query
 - if ($stmt->execute()) 
-  - Checks if comment creation is sucessful
+  - Checks if comment creation is successful
     - Yes -> displays "Comment added to Issue $id successfully<br>"
     - No -> displays ""Error: " . $stmt->error" message
     
@@ -945,3 +938,15 @@ HTML/JavaScript Request:
 HTML/JavaScript Response (no error, bearer token working properly):
 
     {"error":"Valid bearer token required"}
+
+---
+
+### References: 
+Simple_PHP_Server_with_MYSQL.md, page number 9
+Building a REST API Server with PHP.md, page numbers 13, 14, 15, 19, 31, 32, 33, 36
+CRUD_operation.md, page numbers 1, 3, 5, 6, 8, 
+PUT and POST Requests.md, page numbers 32, 34, 35, 36, 38, 39
+Bearer Token Authenticatoin.md, page numbers 11, 12, 14
+Testing REST API Server.md, pages 25, 28, 29, 31, 33, 36
+Frontend with JavaScript.md, pages 16, 19, 20, 21
+Handle_User_Inputs_and_Formats.md, pages 3, 9
