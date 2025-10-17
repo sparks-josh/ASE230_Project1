@@ -216,7 +216,7 @@ HTML/JavaScript Response:
   - Binds the specified name and ID to the query
 - if ($stmt->execute()) 
   - Checks if user creation is sucessful
-    - Yes -> displaus "User '$name' added successfully"
+    - Yes -> displays "User '$name' added successfully"
     - No -> displays ""Error: " . $stmt->error" message
     
 
@@ -286,7 +286,9 @@ HTML/JavaScript Response:
 ### Explanation for get_board API:
 
 - SELECT * FROM users WHERE id = ?
-  - selects all data from the users table where ID is the specified ID
+  - selects all data from the boards table where ID is the specified ID
+- $stmt = $conn->prepare($sql);
+  - Prepares the query for the database
 - $stmt->bind_param("i", $id) 
   - Binds the specified ID to the query
 - $stmt->execute()
@@ -295,8 +297,8 @@ HTML/JavaScript Response:
   - Returns the results of the query
 - if ($result->num_rows > 0)
   - Checks if any data was returned
-    - Yes -> the user's ID and name is displayed
-    - No -> displays "No user with ID $id" message
+    - Yes -> the board's ID and name is displayed
+    - No -> displays "No board with ID $id" message
     
 
 ---
@@ -361,8 +363,8 @@ HTML/JavaScript Response:
 
 ### Explanation for get_all_boards API:
 
-- SELECT * FROM users
-  - selects all data from the users table
+- SELECT * FROM boards
+  - selects all data from the boards table
 - $stmt = $conn->prepare($sql);
   - Prepares the query for the database
 - $stmt->execute()
@@ -371,8 +373,8 @@ HTML/JavaScript Response:
   - Returns the results of the query
 - if ($result->num_rows > 0)
   - Checks if any data was returned
-    - Yes -> All user ID and name information is displayed
-    - No -> displays "No users found" message
+    - Yes -> All board ID and name information is displayed
+    - No -> displays "No boards found" message
     
 
 ---
@@ -435,15 +437,15 @@ HTML/JavaScript Response:
 
 - $name = $_POST['name'] ?? ''; & $id = $_POST['id'] ?? '';
   - Records the user entered name and ID
-- $sql = "INSERT INTO users (name, id) VALUES (?, ?)";
-  - Insert the previously recorded data into the users table 
+- $sql = "INSERT INTO boards (name, id) VALUES (?, ?)";
+  - Insert the previously recorded data into the boards table 
 - $stmt = $conn->prepare($sql);
   - Prepares the query for the database
 - $stmt->bind_param("si", $name, $id);
   - Binds the specified name and ID to the query
 - if ($stmt->execute()) 
-  - Checks if user creation is sucessful
-    - Yes -> displaus "User '$name' added successfully"
+  - Checks if board creation is sucessful
+    - Yes -> displays "Board '$name' added successfully"
     - No -> displays ""Error: " . $stmt->error" message
     
 
@@ -508,8 +510,10 @@ HTML/JavaScript Response (no error, bearer token working properly):
 
 ### Explanation for get_issue API:
 
-- SELECT * FROM users WHERE id = ?
-  - selects all data from the users table where ID is the specified ID
+- SELECT * FROM issues WHERE id = ?
+  - selects all data from the issues table where ID is the specified ID
+- $stmt = $conn->prepare($sql);
+  - Prepares the query for the database
 - $stmt->bind_param("i", $id) 
   - Binds the specified ID to the query
 - $stmt->execute()
@@ -518,8 +522,8 @@ HTML/JavaScript Response (no error, bearer token working properly):
   - Returns the results of the query
 - if ($result->num_rows > 0)
   - Checks if any data was returned
-    - Yes -> the user's ID and name is displayed
-    - No -> displays "No user with ID $id" message
+    - Yes -> the issue's ID, name, status, and associated board ID is displayed
+    - No -> displays "No Issue found with ID $id" message
     
 
 ---
@@ -565,7 +569,7 @@ HTML/JavaScript Response:
 ---
 
 ## get_all_issues API
-     $sql = "SELECT * FROM issues";
+    $sql = "SELECT * FROM issues";
     $stmt = $conn->prepare($sql);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -585,8 +589,8 @@ HTML/JavaScript Response:
 
 ### Explanation for get_all_issues API:
 
-- SELECT * FROM users
-  - selects all data from the users table
+- SELECT * FROM issues
+  - selects all data from the issues table
 - $stmt = $conn->prepare($sql);
   - Prepares the query for the database
 - $stmt->execute()
@@ -595,8 +599,8 @@ HTML/JavaScript Response:
   - Returns the results of the query
 - if ($result->num_rows > 0)
   - Checks if any data was returned
-    - Yes -> All user ID and name information is displayed
-    - No -> displays "No users found" message
+    - Yes -> All issue information is displayed
+    - No -> displays "No Issues found" message
     
 
 ---
@@ -627,11 +631,9 @@ HTML/JavaScript Request:
       } catch (error) {
         document.getElementById('result').textContent =
           'Error: ' + error.message;              
-      }
-    }
+      }}
     function getIssues() {
-      getIssuesInfo();
-    }
+      getIssuesInfo();}
 
 HTML/JavaScript Response:
 
@@ -659,17 +661,17 @@ HTML/JavaScript Response:
 
 ### Explanation for create_issue API:
 
-- $name = $_POST['name'] ?? ''; & $id = $_POST['id'] ?? '';
+- $name = $_POST['name'] ?? ''; & $board_id = $_POST['board_id'] ?? '';
   - Records the user entered name and ID
-- $sql = "INSERT INTO users (name, id) VALUES (?, ?)";
-  - Insert the previously recorded data into the users table 
+- $sql = "INSERT INTO issues (name, board_id, status) VALUES (?, ?, ?)";
+  - Insert the previously recorded data into the issues table 
 - $stmt = $conn->prepare($sql);
   - Prepares the query for the database
-- $stmt->bind_param("si", $name, $id);
-  - Binds the specified name and ID to the query
+- $stmt->bind_param("sis", $name, $board_id, $status);
+  - Binds the specified name, board ID, and status to the query
 - if ($stmt->execute()) 
-  - Checks if user creation is sucessful
-    - Yes -> displaus "User '$name' added successfully"
+  - Checks if issue creation is sucessful
+    - Yes -> displays "Issue '$name' added successfully"
     - No -> displays ""Error: " . $stmt->error" message
     
 
@@ -679,7 +681,7 @@ HTML/JavaScript Response:
 
 cURL Request: 
 
-   curl -s -X POST -H "Content-Type: application/json" \ -d '{"name": "TestIssue2","board_id": 2,"status": "Closed"}' \ http://localhost:8000/issues.php
+    curl -s -X POST -H "Content-Type: application/json" \ -d '{"name": "TestIssue2","board_id": 2,"status": "Closed"}' \ http://localhost:8000/issues.php
 
 
 cURL Response (no error message is good): 
@@ -717,7 +719,7 @@ HTML/JavaScript Response (no error, bearer token working properly):
 
 
 ## update_issue API
-     $raw_data = file_get_contents('php://input');
+    $raw_data = file_get_contents('php://input');
     $json_data = json_decode($raw_data, true);
 
     $new_name = $json_data['name'] ?? '';
@@ -738,18 +740,22 @@ HTML/JavaScript Response (no error, bearer token working properly):
 
 ### Explanation for update_issue API:
 
-- $name = $_POST['name'] ?? ''; & $id = $_POST['id'] ?? '';
-  - Records the user entered name and ID
-- $sql = "INSERT INTO users (name, id) VALUES (?, ?)";
-  - Insert the previously recorded data into the users table 
+- $raw_data = file_get_contents('php://input'); $json_data = json_decode($raw_data, true);
+  - Reads the raw input data and converts it into a PHP array
+- $new_name = $json_data['name'] ?? '';
+    $new_board_id = $json_data['board_id'] ?? '';
+    $new_status = $json_data['status'] ?? '';
+    - Records the user entered name, board ID, and status
+- $sql = "UPDATE issues SET name = ?, board_id = ?, status = ? WHERE id = ?";
+  - Insert the previously recorded updated data into the issues table 
 - $stmt = $conn->prepare($sql);
   - Prepares the query for the database
-- $stmt->bind_param("si", $name, $id);
-  - Binds the specified name and ID to the query
+- $stmt->bind_param("sisi", $new_name, $new_board_id, $new_status, $id);
+  - Binds the specified name, board ID, and status to the query
 - if ($stmt->execute()) 
-  - Checks if user creation is sucessful
-    - Yes -> displaus "User '$name' added successfully"
-    - No -> displays ""Error: " . $stmt->error" message
+  - Checks if issue update is sucessful
+    - Yes -> displays "Issue with ID $id updated successfully"
+    - No -> displays ""Error updating issue: " . $stmt->error" message
     
 
 ---
@@ -812,20 +818,20 @@ HTML/JavaScript Response (no error, bearer token working properly):
 ---
 
 ### Explanation for update_issue_status API:
-
-- $name = $_POST['name'] ?? ''; & $id = $_POST['id'] ?? '';
-  - Records the user entered name and ID
-- $sql = "INSERT INTO users (name, id) VALUES (?, ?)";
-  - Insert the previously recorded data into the users table 
+- $raw_data = file_get_contents('php://input'); $json_data = json_decode($raw_data, true); 
+  - Reads the raw input data and converts it into a PHP array
+- $new_status = $json_data['status'] ?? '';
+    - Records the user entered status
+- $sql = "UPDATE issues SET status = ? WHERE id = ?";
+  - Insert the previously recorded data into the issues table 
 - $stmt = $conn->prepare($sql);
   - Prepares the query for the database
-- $stmt->bind_param("si", $name, $id);
-  - Binds the specified name and ID to the query
+- $stmt->bind_param("si", $new_status, $id);
+  - Binds the specified status to the query
 - if ($stmt->execute()) 
-  - Checks if user creation is sucessful
-    - Yes -> displaus "User '$name' added successfully"
-    - No -> displays ""Error: " . $stmt->error" message
-    
+  - Checks if issue update is sucessful
+    - Yes -> displays "Issue with ID $id updated successfully"
+    - No -> displays ""Error updating issue: " . $stmt->error" message
 
 ---
 
@@ -833,7 +839,7 @@ HTML/JavaScript Response (no error, bearer token working properly):
 
 cURL Request: 
 
-  curl -s -X PATCH -H "Content-Type: application/json" \ -d '{"status":"Open"}' \ http://localhost:8000/issues.php/3/status
+    curl -s -X PATCH -H "Content-Type: application/json" \ -d '{"status":"Open"}' \ http://localhost:8000/issues.php/3/status
 
 
 cURL Response (no error, bearer token working properly): 
@@ -886,17 +892,17 @@ HTML/JavaScript Response (no error, bearer token working properly):
 
 ### Explanation for add_issue_comment API:
 
-- $name = $_POST['name'] ?? ''; & $id = $_POST['id'] ?? '';
-  - Records the user entered name and ID
-- $sql = "INSERT INTO users (name, id) VALUES (?, ?)";
-  - Insert the previously recorded data into the users table 
+- $comment = $_POST['comment'] ?? '';
+  - Records the user entered comment
+- $sql = "UPDATE issues SET comment = ? WHERE id = ?";
+  - Insert the previously recorded data into the issues table where ID is the specified ID
 - $stmt = $conn->prepare($sql);
   - Prepares the query for the database
-- $stmt->bind_param("si", $name, $id);
-  - Binds the specified name and ID to the query
+- $stmt->bind_param("si", $comment, $id);
+  - Binds the specified comment and ID to the query
 - if ($stmt->execute()) 
-  - Checks if user creation is sucessful
-    - Yes -> displaus "User '$name' added successfully"
+  - Checks if comment creation is sucessful
+    - Yes -> displays "Comment added to Issue $id successfully<br>"
     - No -> displays ""Error: " . $stmt->error" message
     
 
