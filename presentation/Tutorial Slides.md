@@ -4,11 +4,12 @@ marp: true
 
 # Project 1 Tutorial Slides
 Joshua Sparks, Northern Ketucky University
+
 Prepared for: Prof. Samuel Cho, ASE 230, Fall 2025
 
 ---
 
-## Overview:
+### Overview:
 
 The goal of this project was to create a Jira-like ticketing system that accomplishes the following tasks: 
 - Implement at least 8 rest APIs with at least 2 bearer tokens
@@ -18,7 +19,7 @@ The goal of this project was to create a Jira-like ticketing system that accompl
 
 ------
 
-## Database Tables Breakdown: 
+### Database Tables Breakdown: 
     +---------------------+
     | Tables_in_jira_lite |
     +---------------------+
@@ -410,7 +411,7 @@ HTML/JavaScript Response:
 
 ---
 
-## create_board API
+### create_board API
     $name = $_POST['name'] ?? '';
     $id = $_POST['id'] ?? '';
 
@@ -484,7 +485,7 @@ HTML/JavaScript Response (no error, bearer token working properly):
 ---
 
 
-## get_issue API
+### get_issue API
     $sql = "SELECT * FROM issues WHERE id = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("i", $id);
@@ -561,7 +562,7 @@ HTML/JavaScript Response:
 
 ---
 
-## get_all_issues API
+### get_all_issues API
     $sql = "SELECT * FROM issues";
     $stmt = $conn->prepare($sql);
     $stmt->execute();
@@ -635,7 +636,7 @@ HTML/JavaScript Response:
 
 ---
 
-## create_issue API
+### create_issue API
     $name = $_POST['name'] ?? '';
     $board_id = $_POST['board_id'] ?? '';
     $status = $_POST['status'] ?? '';
@@ -711,7 +712,7 @@ HTML/JavaScript Response (no error, bearer token working properly):
 ---
 
 
-## update_issue API
+### update_issue API
     $raw_data = file_get_contents('php://input');
     $json_data = json_decode($raw_data, true);
 
@@ -793,7 +794,7 @@ HTML/JavaScript Response (no error, bearer token working properly):
 
 ---
 
-## update_issue_status API
+### update_issue_status API
     $raw_data = file_get_contents('php://input');
     $json_data = json_decode($raw_data, true);
     $new_status = $json_data['status'] ?? '';
@@ -868,7 +869,7 @@ HTML/JavaScript Response (no error, bearer token working properly):
 
 ---
 
-## add_issue_comment API
+### add_issue_comment API
     $comment = $_POST['comment'] ?? '';
 
     $sql = "UPDATE issues SET comment = ? WHERE id = ?";
