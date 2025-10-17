@@ -1,15 +1,16 @@
 ---
 marp: true
+paginate: true
 ---
 
 # Project 1 Tutorial Slides
-Joshua Sparks, Northern Ketucky University
+Joshua Sparks, Northern Kentucky University
 
 Prepared for: Prof. Samuel Cho, ASE 230, Fall 2025
 
 ---
 
-### Overview:
+## Overview:
 
 The goal of this project was to create a Jira-like ticketing system that accomplishes the following tasks: 
 - Implement at least 8 rest APIs with at least 2 bearer tokens
@@ -411,7 +412,7 @@ HTML/JavaScript Response:
 
 ---
 
-### create_board API
+## create_board API
     $name = $_POST['name'] ?? '';
     $id = $_POST['id'] ?? '';
 
@@ -485,7 +486,7 @@ HTML/JavaScript Response (no error, bearer token working properly):
 ---
 
 
-### get_issue API
+## get_issue API
     $sql = "SELECT * FROM issues WHERE id = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("i", $id);
@@ -562,7 +563,7 @@ HTML/JavaScript Response:
 
 ---
 
-### get_all_issues API
+## get_all_issues API
     $sql = "SELECT * FROM issues";
     $stmt = $conn->prepare($sql);
     $stmt->execute();
@@ -636,7 +637,7 @@ HTML/JavaScript Response:
 
 ---
 
-### create_issue API
+## create_issue API
     $name = $_POST['name'] ?? '';
     $board_id = $_POST['board_id'] ?? '';
     $status = $_POST['status'] ?? '';
@@ -712,7 +713,7 @@ HTML/JavaScript Response (no error, bearer token working properly):
 ---
 
 
-### update_issue API
+## update_issue API
     $raw_data = file_get_contents('php://input');
     $json_data = json_decode($raw_data, true);
 
@@ -794,7 +795,7 @@ HTML/JavaScript Response (no error, bearer token working properly):
 
 ---
 
-### update_issue_status API
+## update_issue_status API
     $raw_data = file_get_contents('php://input');
     $json_data = json_decode($raw_data, true);
     $new_status = $json_data['status'] ?? '';
@@ -869,7 +870,7 @@ HTML/JavaScript Response (no error, bearer token working properly):
 
 ---
 
-### add_issue_comment API
+## add_issue_comment API
     $comment = $_POST['comment'] ?? '';
 
     $sql = "UPDATE issues SET comment = ? WHERE id = ?";
@@ -942,7 +943,7 @@ HTML/JavaScript Response (no error, bearer token working properly):
 
 ---
 
-### References: 
+## References: 
 Simple_PHP_Server_with_MYSQL.md, page number 9
 Building a REST API Server with PHP.md, page numbers 13, 14, 15, 19, 31, 32, 33, 36
 CRUD_operation.md, page numbers 1, 3, 5, 6, 8, 
@@ -951,3 +952,4 @@ Bearer Token Authenticatoin.md, page numbers 11, 12, 14
 Testing REST API Server.md, pages 25, 28, 29, 31, 33, 36
 Frontend with JavaScript.md, pages 16, 19, 20, 21
 Handle_User_Inputs_and_Formats.md, pages 3, 9
+project1_outline.md marp format
