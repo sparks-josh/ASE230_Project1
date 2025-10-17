@@ -11,8 +11,9 @@ Submission Deadline (10/18 Sat 23:59 pm)
 ## Your Project 1 Submission Date
 
 1. When (Plan): October 18
-2. When (Actual): N/A
-3. Comment: Actual Date to be determined upon project completion
+2. When (Actual): October 18
+
+3. Comment: Successful milestone completion
 
 ## Project 1 Milestones
 

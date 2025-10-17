@@ -92,34 +92,34 @@ Total points earned in this section:
 
 ## 🔹 NGINX Deployment (20 pts)
 
-- [ /10] REST API deployed with **NGINX**  - no partial points
-- [ /10] Deployment steps/tutorial documented in Marp slide (and converted into PDFs)
+- [10/10] REST API deployed with **NGINX**  - no partial points
+- [10/10] Deployment steps/tutorial documented in Marp slide (and converted into PDFs)
   - full points if marp file is made with screen captures, no partial points
   - List Marp file name: NGINX Deployment.md
-  - [T/F] A screen capture of your NGINX server working should be included (any screen capture is OK when it shows NGINX is working)
+  - [T] A screen capture of your NGINX server working should be included (any screen capture is OK when it shows NGINX is working)
   - Don't need to push to GitHub (but it's OK if you do so).
-- [T/F] Saved in `presentation/` directory  
+- [T] Saved in `presentation/` directory  
   - Earn 0 points in this section when you do not copy your slides.
 
 ---
 
 | Task                                       | Points | Earned  |
 |--------------------------------------------|--------|---------|
-| REST API deployed with NGINX               | 10     | [ /10]  |
-| Deployment steps/tutorial in Marp          | 10     | [ /10]  |
-| ↳ Includes screen capture of NGINX working | T/F    | [ T/F ] |
-| Saved in `presentation/` directory         | T/F    | [ T/F ] |
-| **Total**                                  | **20** | [ /20]  |
+| REST API deployed with NGINX               | 10     | [10/10]  |
+| Deployment steps/tutorial in Marp          | 10     | [10/10]  |
+| ↳ Includes screen capture of NGINX working | T/F    | [ T ] |
+| Saved in `presentation/` directory         | T/F    | [ T ] |
+| **Total**                                  | **20** | [20/20]  |
 
 ---
 
 ## 🏁 Final Checks
 
-- [ ] I understand that I may deduct points if the results are of poor quality.
-- [ ] I understand that I may be reported as plagiarism if I used other (including the professor's slides) work, but did not reference it.
-- [ ] Copy files in correct directory: `code/`, `presentation/`, `plan/`  
-- [ ] Pushed to GitHub + submitted zip copy  
-- [ ] Project ready for **portfolio showcase**  
+- [X] I understand that I may deduct points if the results are of poor quality.
+- [X] I understand that I may be reported as plagiarism if I used other (including the professor's slides) work, but did not reference it.
+- [X] Copy files in correct directory: `code/`, `presentation/`, `plan/`  
+- [X] Pushed to GitHub + submitted zip copy  
+- [X] Project ready for **portfolio showcase**  
 
 ---
 
@@ -127,5 +127,5 @@ Total points earned in this section:
 |----------------------------|---------|---------|
 | 🔹 REST API Implementation | 130     | [130/130] |
 | 🔹 Tutorial Slides         | 50      | [50/50]  |
-| 🔹 NGINX Deployment        | 20      | [ /20]  |
-| **Total**                  | **150** | [ /200] |
+| 🔹 NGINX Deployment        | 20      | [20/20]  |
+| **Total**                  | **150** | [200/200] |
