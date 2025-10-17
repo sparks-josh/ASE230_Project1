@@ -66,7 +66,7 @@ Total points earned in this section:
 ## 🔹 Tutorial Slides (50 pts)
 
 - [ /30] Created **Marp slides** explaining API usage (more than 20 pages (and converted into PDFs) - explanation/example for each API, 15 points if not, 0 points if none)
-  - List Marp file name:
+  - List Marp file name: Tutorial Slides.md
   - [T/F] Clear explanation of each endpoint: May lose points if not clearly explained
 - [ /10] Includes examples of requests/responses - no partial points
 - [ /10] Slides (and PDFs) uploaded to **GitHub** - no partial points
@@ -94,7 +94,7 @@ Total points earned in this section:
 - [ /10] REST API deployed with **NGINX**  - no partial points
 - [ /10] Deployment steps/tutorial documented in Marp slide (and converted into PDFs)
   - full points if marp file is made with screen captures, no partial points
-  - List Marp file name:
+  - List Marp file name: NGINX Deployment.md
   - [T/F] A screen capture of your NGINX server working should be included (any screen capture is OK when it shows NGINX is working)
   - Don't need to push to GitHub (but it's OK if you do so).
 - [T/F] Saved in `presentation/` directory  
@@ -127,4 +127,4 @@ Total points earned in this section:
 | 🔹 REST API Implementation | 130     | [ /130] |
 | 🔹 Tutorial Slides         | 50      | [ /50]  |
 | 🔹 NGINX Deployment        | 20      | [ /20]  |
-| **Total**                  | **150** | [ /150] |
+| **Total**                  | **150** | [ /200] |
