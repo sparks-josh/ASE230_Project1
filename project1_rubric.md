@@ -71,21 +71,21 @@ Total points earned in this section:
 - [10/10] Includes examples of requests/responses - no partial points
 - [10/10] Slides (and PDFs) uploaded to **GitHub** - no partial points
   - Convert the marp to PDF: Tutorial Slides.pdf
-  - Write your GitHub repository marp link: 
-  - Write your GitHub repository PDF link:
-- [T/F] Saved in `presentation/` directory  
+  - Write your GitHub repository marp link: https://github.com/sparks-josh/ASE230_Project1/blob/f8851a1d860b975acf296c090708c6b36f954200/presentation/Tutorial%20Slides.md
+  - Write your GitHub repository PDF link: https://github.com/sparks-josh/ASE230_Project1/blob/f8851a1d860b975acf296c090708c6b36f954200/presentation/Tutorial%20Slides.pdf
+- [T] Saved in `presentation/` directory  
   - Earn 0 points in this section when you do not copy your slides.
 
 ---
 
 | Task                               | Points | Earned  |
 |------------------------------------|--------|---------|
-| Marp slides (>20 pages)            | 30     | [ /30]  |
-| Clear explanation of endpoints     | T/F    | [ T/F ] |
-| Examples of requests/responses     | 10     | [ /10]  |
-| Slides uploaded to GitHub          | 10     | [ /10]  |
-| Saved in `presentation/` directory | T/F    | [ T/F ] |
-| **Total**                          | **50** | [ /50]  |
+| Marp slides (>20 pages)            | 30     | [30/30]  |
+| Clear explanation of endpoints     | T/F    | [ T ] |
+| Examples of requests/responses     | 10     | [ 10/10]  |
+| Slides uploaded to GitHub          | 10     | [ 10/10]  |
+| Saved in `presentation/` directory | T/F    | [ T ] |
+| **Total**                          | **50** | [ 50/50]  |
 
 ---
 
@@ -124,7 +124,7 @@ Total points earned in this section:
 
 | Task                       | Points  | Earned  |
 |----------------------------|---------|---------|
-| 🔹 REST API Implementation | 130     | [ /130] |
-| 🔹 Tutorial Slides         | 50      | [ /50]  |
+| 🔹 REST API Implementation | 130     | [130/130] |
+| 🔹 Tutorial Slides         | 50      | [50/50]  |
 | 🔹 NGINX Deployment        | 20      | [ /20]  |
 | **Total**                  | **150** | [ /200] |
