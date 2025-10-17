@@ -30,16 +30,17 @@ Total Points: 200
 
 - [10/10] Database integration working (CRUD) - Full points if MySQL works fine, no partial points
   - List your MySQL table names:
-  mysql> show TABLES;
-+---------------------+
-| Tables_in_jira_lite |
-+---------------------+
-| boards              |
-| comments            |
-| issues              |
-| users               |
-+---------------------+
-4 rows in set (0.003 sec)
+  
+        mysql> show TABLES;
+        +---------------------+
+        | Tables_in_jira_lite |
+        +---------------------+
+        | boards              |
+        | comments            |
+        | issues              |
+        | users               |
+        +---------------------+
+
 - [20/20] Code pushed to **GitHub repository** - Full points if pushed to GitHub and provide a link, no partial points 
   - Write your GitHub repository link: https://github.com/sparks-josh/ASE230_Project1.git
 - [T] Copy included in `code/` directory  
